@@ -1,0 +1,18 @@
+.c-social-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // padding: 2rem 0;
+  margin-right: 4.25rem;
+  &__link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    max-height: 1.25rem;
+  }
+  
+  &__icon {
+    max-height: 1.25rem;
+  }
+}

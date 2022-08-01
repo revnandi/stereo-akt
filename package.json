@@ -1,0 +1,21 @@
+{
+  "name": "vite-wp-boilerplate",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.4",
+    "cross-env": "^7.0.3",
+    "sass": "^1.53.0",
+    "vite": "^2.9.1",
+    "vite-plugin-live-reload": "^2.1.0"
+  },
+  "dependencies": {
+    "@splidejs/splide": "^4.0.7",
+    "js-video-url-parser": "^0.5.1",
+    "plyr": "^3.7.2"
+  }
+}

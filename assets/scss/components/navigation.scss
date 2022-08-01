@@ -1,0 +1,44 @@
+.c-main-navigation {
+  float: none;
+  display: flex;
+  width: 100%;
+  // width: 100%;
+  @include breakpoint(small) {
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    // padding: 1rem 1.125rem;
+    background: $color-primary;
+  }
+  &__list {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    @include breakpoint(small) {
+      flex-direction: column;
+    }
+    & > * + * {
+      margin: .3125rem 0 0 0;
+      @include breakpoint(medium_large) {
+        margin: 0 0 0 2.5rem;
+      }
+    }
+  }
+  &__link {
+    color: $color-green;
+    font-size: 1.375rem;
+    line-height: 1.181em;
+    text-transform: uppercase;
+    text-decoration: none;
+    @include breakpoint(small) {
+      font-size: 1.1875rem;
+      line-height: 1.166em;
+    }
+  }
+}
