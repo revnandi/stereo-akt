@@ -79,3 +79,28 @@ class My_Walker_Nav_Menu extends Walker_Nav_Menu {
 function pretty_dump($data) {
 	highlight_string("<?php\n\$data =\n" . var_export($data, true) . ";\n?>");
 };
+
+// Video helper functions
+function getVideoType($url) {
+  if (strpos($url, "youtube") > 0) {
+      return "youtube";
+  } elseif (strpos($url, "vimeo") > 0) {
+      return "vimeo";
+  } else {
+      return "unknown";
+  }
+};
+
+function getId($url, $type) {
+  if($type === "youtube") {
+    preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user|shorts)\/))([^\?&\"'>]+)/", $url, $output_array);
+    return "https://www.youtube.com/watch?v=" . $output_array[1] . "?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1";
+  } else if($type === "vimeo") {
+    return $url . "&title=0&byline=0&portrait=0";
+  } else {
+    return "unknown";
+  }
+};
+
+// Add post thumbnail support
+add_theme_support('post-thumbnails');

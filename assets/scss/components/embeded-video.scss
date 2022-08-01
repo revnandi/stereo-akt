@@ -1,0 +1,21 @@
+.c-embeded-video {
+  background-color: $color-dark;
+  & input {
+    color: $color-green;
+  }
+  & .plyr {
+    &__control{
+      &--overlaid {
+        background: $color-green;
+      }
+    }
+  }
+  &__inner {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 3rem;
+  }
+}

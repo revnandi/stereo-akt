@@ -12,6 +12,9 @@
       // margin-top: 60px;
     }
   }
+  &__list-container {
+    display: contents;
+  }
   &__grid {
     display: grid;
     grid-template-rows: repeat(2, 1fr);

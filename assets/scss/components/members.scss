@@ -1,0 +1,96 @@
+.c-member-list {
+  $self : &;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  &__item-empty {
+    background-color: $color-beige;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    // font-size: 12rem;
+    font-size: 10vw;
+    @include breakpoint(medium_large) {
+      font-size: 23vw;
+    }
+  }
+  &__item {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
+    @supports not (aspect-ratio:  1 / 1) { 
+      height: 0;
+      padding-bottom: 100%;
+    }
+    &:hover {
+      &__preview-overlay {
+        opacity: 1;
+      }
+    }
+  }
+  &__preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background-color: $color-purple;
+    opacity: 0;
+    transition: 200ms opacity ease;
+  }
+  &__preview-image-container {
+    width: 100%;
+    height: 100%;
+    @supports not (aspect-ratio: 1 / 1) {
+      position: absolute;
+    }
+  }
+  &__preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  &__preview-title {
+    > * {
+      margin: 0;
+      font-size: 0.875rem;
+      line-height: 1.214em;
+    }
+  }
+
+  &__preview-categories {
+    font-size: .5625rem;
+    line-height: 1.222em;
+    text-transform: uppercase;
+  }
+  &__item-has-lowerindex {
+    position: relative;
+    span {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 25%;
+      height: 25%;
+      display: flex;
+      align-items: center;
+      background-color: #000;
+      color: $color-beige;
+      font-size: 1.6rem;
+      @include breakpoint(small) {
+        font-size: 2.6vw;
+      }
+      @include breakpoint(medium_large) {
+        font-size: 1.3vw;
+      }
+    }
+  }
+}

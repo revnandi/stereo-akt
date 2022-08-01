@@ -35,5 +35,5 @@
         </div>
     </header>
 
-    <main class="flex-grow px-4 py-4">
+    <main>
 

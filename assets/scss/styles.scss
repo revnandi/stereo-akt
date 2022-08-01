@@ -3,6 +3,7 @@
 @import './mixins.scss';
 @import './base.scss';
 
+@import './libs/plyr/plyr';
 @import './libs/splider';
 
 @import './components/header.scss';
@@ -17,3 +18,7 @@
 @import './components/content.scss';
 @import './components/news.scss';
 @import './components/hero.scss';
+@import './components/carousel.scss';
+@import './components/embeded-video.scss';
+@import './components/events-list.scss';
+@import './components/members.scss';
