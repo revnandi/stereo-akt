@@ -1,4 +1,40 @@
+html {
+  background-color: $color-green;
+}
+
 body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   font-family: $font-primary;
   color: $color-dark;
+  background-color: $color-green;
+}
+
+body:not(.loaded) header {
+  display:none;
+}
+
+.no-overflow-y {
+  @include breakpoint(small) {
+    overflow-y: hidden;
+  }
+}
+
+h2 {
+  font-weight: normal;
+  font-family: "Space Mono",monospace;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.4em;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 0;
+}
+
+main {
+  @include breakpoint(small) {
+    margin-top: 3.75rem;
+  }
 }

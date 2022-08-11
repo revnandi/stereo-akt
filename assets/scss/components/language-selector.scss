@@ -1,67 +1,64 @@
-// .c-language-selector {
-//   display: inline-block;
-//   align-self: baseline;
-//   padding: 0;
-//   margin: 0;
-//   border: 0;
-//   background: none;
-//   font-style: normal;
-//   font-weight: 400;
-//   font-size: 1.1875rem;
-//   line-height: 1.157em;
-//   letter-spacing: 0.005em;
-//   cursor: pointer;
-//   @include breakpoint(small) {
-//     position: fixed;
-//     top: 1rem;
-//     right: 1.125rem;
-//     z-index: 1;
-//   }
-// }
-
 .c-language-selector {
   position: relative;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
-  padding: 0 2.272em;
-  font-size: 1.375rem;
+  width: 100%;
+  font-size: 6vw;
   line-height: 1.181em;
   color: $color-green;
+  & > * + * {
+    margin-left: .875em;
+  }
   @include breakpoint(medium) {
+    padding: 0 2.272em;
     font-size: 1rem;
   }
   @include breakpoint(medium_large) {
-    font-size: 1rem;
-    & > * + * {
-      margin-left: .875rem;
-    }
+    font-size: 1.25rem;
   }
   @include breakpoint(large) {
     font-size: 1.375rem;
+  }
+  &__list {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    & .lang-item {
+      position: relative;
+      & + * {
+        margin-left: .875em;
+      }
+      &.current-lang {
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -0.2em;
+          left: 50%;
+          width: 50%;
+          height: 0.125em;
+          transform: translateX(-50%);
+          background: $color-green;
+        }
+      }
+    }
   }
   a {
     position: relative;
     text-decoration: none;
     color: $color-green!important;
+    text-transform: uppercase;
     &:hover {
       color: #fff;
-    }
-    &.active {
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -0.2em;
-        left: 50%;
-        width: 50%;
-        height: 0.125em;
-        transform: translateX(-50%);
-        background: $color-green;
-      }
     }
   }
   &::after {
     z-index: 1;
-    content: "AKT";
     position: absolute;
     bottom: -100%;
     left: 0;
@@ -74,10 +71,16 @@
     background-color: $color-green;
     color: #000;
     font-size: 3.854166666666667vw;
-    @include breakpoint(medium_large) {
-      font-size: 6.854167vw;
+    @include breakpoint(medium) {
+      content: "AKT";
+      font-size: 2.5vw;
+      padding: 1em;
     }
-    @include breakpoint(wide)  {
+    @include breakpoint(large) {
+      font-size: 2vw;
+      padding: 1em;
+    }
+    @include breakpoint(wide) {
       font-size: 1.854167vw;
     }
   }

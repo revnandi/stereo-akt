@@ -1,5 +1,8 @@
 .c-header {
+  z-index: 3;
   background-color: $color-dark;
+  @include breakpoint(small) {
+  }
   &__inner {
     // padding: 1.3125rem 1.1875rem 0 1.1875rem;
     @include breakpoint(medium) {
@@ -10,19 +13,50 @@
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    margin-left: 4.125rem !important;
+    @include breakpoint(small) {
+      z-index: 1;
+      position: fixed;
+      top: 0;
+      display: none;
+      flex-direction: column;
+      justify-content: initial;
+      width: 100%;
+      height: 100%;
+      padding: 4rem 1rem 3rem 1rem;
+      margin: 0;
+      background-color: $color-dark;
+    }
+    @include breakpoint(medium) {
+      margin-left: 2.125rem;
+    }
+    @include breakpoint(medium_large) {
+      margin-left: 4.25rem;
+    }
+    &--is-active {
+      display: flex;
+    }
   }
   &__menu-right {
     display: flex;
+    @include breakpoint(small) {
+      flex-direction: column;
+      width: 100%;
+      margin-top: 3rem;
+      text-align: center;
+    }
+ 
   }
   &__logo-language-selector-container {
     display: flex;
     justify-content: center;
     width: 100%;
+    margin-top: 3rem;
+    @include breakpoint(medium) {
+      margin-top: 0;
+    }
   }
   &__decorator {
     position: relative;
-    display: flex;
     align-items: center;
     justify-content: center;
     padding: 0px 0.5em;
@@ -30,12 +64,30 @@
     color: #000; 
     font-size: 3.854166666666667vw;
     text-transform: uppercase;
+    display: none;
+    @include breakpoint(medium) {
+      display: flex;
+      font-size: 2.5vw;
+      padding: 0.75em;
+    }
     @include breakpoint(large) {
-      font-size: 6.854167vw;
+      font-size: 2vw;
       padding: 1em;
     }
     @include breakpoint(wide) {
       font-size: 1.854167vw;
+    }
+  }
+  &__button-container {
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: $color-dark;
+    text-align: right;
+    @include breakpoint(medium) {
+      display: none;
     }
   }
 }

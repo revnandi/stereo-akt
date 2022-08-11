@@ -22,7 +22,7 @@
     height: 100%;
   }
   &__grid-row {
-    z-index: 2;
+    z-index: 1;
     position: relative;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -36,6 +36,7 @@
     justify-content: center;
     height: 100%;
     background-color: $color-green;
+    font-size: 15vw;
     @include breakpoint(medium) {
       font-size: 12vw;
     }
@@ -55,15 +56,12 @@
     grid-column: 1 / span 2;
     aspect-ratio: 2 / 1;
   }
-  
   &__grid-block-s {
     grid-column: 1 / span 1;
   }
-  
   &__grid-block-a {
     grid-column: 2 / span 1;
   }
-  
   &__slider {
     position: absolute;
     top: 0;

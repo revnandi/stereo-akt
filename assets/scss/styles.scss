@@ -5,6 +5,7 @@
 
 @import './libs/plyr/plyr';
 @import './libs/splider';
+@import './libs/hamburgers/hamburgers.scss';
 
 @import './components/header.scss';
 @import './components/footer.scss';
@@ -12,9 +13,8 @@
 
 @import './components/logo.scss';
 @import './components/language-selector.scss';
-@import './components/menu-button.scss';
 @import './components/social-links.scss';
-
+@import './components/page.scss';
 @import './components/content.scss';
 @import './components/news.scss';
 @import './components/hero.scss';
@@ -22,3 +22,7 @@
 @import './components/embeded-video.scss';
 @import './components/events-list.scss';
 @import './components/members.scss';
+@import './components/performance-list.scss';
+@import './components/modal-video.scss';
+@import './components/performances-projects.scss';
+@import './components/archive.scss';

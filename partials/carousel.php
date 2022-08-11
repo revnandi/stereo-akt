@@ -1,9 +1,9 @@
-<div id="stereoakt_image_carousel" class="splide c-carousel" aria-label="Image Gallery">
-  <div class="splide__track c-carousel__inner">
-  <?php 
+<?php 
     $images = get_field('carousel_images');
     if( $images ): ?>
-        <ul class="splide__list c-carousel__list">
+      <div id="stereoakt_image_carousel" class="splide c-carousel" aria-label="Image Gallery">
+        <div class="splide__track c-carousel__inner">
+          <ul class="splide__list c-carousel__list">
             <?php foreach( $images as $image ): ?>
                 <li class="splide__slide c-carousel__item">
                   <img
@@ -22,6 +22,6 @@
                 </li>
             <?php endforeach; ?>
         </ul>
+      </div>
+    </div>
     <?php endif; ?>
-  </div>
-</div>

@@ -6,6 +6,8 @@ Template Name: Home
 
 <?php get_header(); ?>
 
+<?php require get_template_directory() . '/partials/hero/hero.php'; ?>
+
 <div class="c-page">
 	
 	<section class="c-section">
@@ -50,13 +52,17 @@ Template Name: Home
 							
 									// Load sub field value.
 									$date_time = get_sub_field('date_time');
+									$subtitle = get_sub_field('subtitle');
+									$location = get_sub_field('location');
 									// Do something...
 									// pretty_dump($date_time);
 
 									$obj_to_add = (object) [
 										'date' => $date_time,
 										'title'	=> get_the_title(),
-										'url' => get_permalink()
+										'url' => get_permalink(),
+										'subtitle' => $subtitle,
+										'location' => $location,
 									];
 
 									
@@ -100,12 +106,12 @@ Template Name: Home
 										<div class="c-events-list__preview-info">
 										<h2 class="c-events-list__preview-title"><?php echo $item->title ?></h2>
 											<div class="c-events-list__preview-categories">
-												<span class="c-events-list__preview-category">{@}</span>
+												<span class="c-events-list__preview-category"><?php echo $item->subtitle ?></span>
 											</div>
-											<div class="c-events-list__preview-location">{location.addressTitle}</div>
+											<div class="c-events-list__preview-location"><?php echo $item->location ?></div>
 										</div>
 										<div class="c-events-list__more-button-container">
-										<a class="c-events-list__more-link" href="<?php echo $item->url ?>">Több infó</a>
+											<a class="c-events-list__more-link" href="<?php echo $item->url ?>">Több infó</a>
 										</div>
 									</li>
 									<?php endforeach; ?>
@@ -134,7 +140,77 @@ Template Name: Home
 				
 				<div class="c-content__columns">
 
-					<div class="c-content__column"></div>
+					<div class="c-content__column">
+
+					<?php
+
+						$dates_list = [];
+
+						$performances_args = array(  
+							'post_type' => 'performances',
+							'post_status' => 'publish',
+							'posts_per_page' => -1, 
+							'orderby' => 'date', 
+							'order' => 'ASC',
+							'meta_key'		=> 'show_on_homepage',
+							'meta_value'	=> true
+						);
+
+						$performances_loop = new WP_Query( $performances_args );
+
+						
+						if ( $performances_loop->have_posts() ) : ?>
+
+							<ul class="c-performance-list">
+							
+							<?php while ( $performances_loop->have_posts() ) : $performances_loop->the_post(); ?>
+
+								<?php
+									$item_image_lqip = wp_get_attachment_image_src((get_post_thumbnail_id( get_the_ID())), 'lqip');
+									$item_image = wp_get_attachment_image_src((get_post_thumbnail_id( get_the_ID())),  'medium_large');
+									$item_video = get_field('video');
+								?>	
+
+								<li class="c-performance-list__item">
+									<div class="c-performance-list__preview-image-container">
+										<?php if ($item_image[0] ) : ?>
+											<img class="c-performance-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo the_title() ?>"/>
+										<?php endif; ?>
+									</div>
+									<div class="c-performance-list__preview-box">
+										<?php if ($item_video) : ?>
+											<button class="c-performance-list__preview-trailer-link" data-video-url="<?php echo getId($item_video, getVideoType($item_video)) ?>" target="_blank">Trailer</button>
+										<?php endif; ?>
+										<div class="c-performance-list__preview-info">
+											<div class="c-performance-list__preview-title">
+												<h2><?php echo the_title() ?></h2>
+											</div>
+											<div class="c-performance-list__preview-subtitle">
+												<?php the_field('subtitle') ?>
+											</div>
+											<div class="c-performance-list__preview-made-by">
+												<?php the_field('made_by') ?>
+											</div>
+										</div>
+										<a class="c-performance-list__preview-open-link" href="<?php echo the_permalink() ?>">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.13 22.84">
+												<polyline points="0.35 0.35 11.42 11.42 0.35 22.48" style="fill: none;stroke: #000;stroke-miterlimit: 10"/>
+											</svg>
+										</a>
+									</div>
+								</li>
+									
+							<?php endwhile; ?>
+
+							</ul>
+								
+						<?php endif;
+
+						wp_reset_postdata();
+							
+					?>
+
+					</div>
 					
 					<div class="c-content__column">
 					
@@ -158,28 +234,27 @@ Template Name: Home
 							<?php foreach ( $members_loop as $indx => $item ) : ?>
 								
 								<?php
-									$item_image_lqip = wp_get_attachment_image_src((get_post_thumbnail_id( $item->ID, 'lqip' )));
-									$item_image = wp_get_attachment_image_src((get_post_thumbnail_id( $item->ID, 'medium_large' )));
-
+									$item_image_lqip = wp_get_attachment_image_src((get_post_thumbnail_id( $item->ID)), 'lqip');
+									$item_image = wp_get_attachment_image_src((get_post_thumbnail_id( $item->ID)),  'medium');
+									$item_tags = get_the_tags($item->ID);
 								?>
 						
 							<?php if ($indx === 0) : ?>
 								<li class="c-member-list__item">
 								<div class="c-member-list__preview-image-container">
-									<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" loading="lazy" alt="{title}"/>
+									<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo $item->post_title ?>"/>
 								</div>
 								<div class="c-member-list__preview-overlay">
 									<div class="c-member-list__preview-title">
 									<h2><?php echo $item->post_title ?></h2>
 									</div>
-									{.if categories}
+									<?php if($item_tags) : ?>
 									<div class="c-member-list__preview-categories">
-										{.repeated section categories}
-										<span class="c-member-list__preview-category">{@}</span>
-										{.alternates with},
-										{.end}  
+										<?php foreach ( $item_tags as $indx => $tag ) : ?>
+										<span class="c-member-list__preview-category"><?php echo $tag->name?></span>,
+										<?php endforeach; ?>
 									</div>
-									{.end}
+									<?php endif; ?>
 								</div>
 								</li>
 								<li class="c-member-list__item-empty"></li>
@@ -189,40 +264,38 @@ Template Name: Home
 							<?php if ($indx === 1) : ?>
 								<li class="c-member-list__item">
 								<div class="c-member-list__preview-image-container">
-									<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" loading="lazy" alt="{title}"/>
+									<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo $item->post_title ?>"/>
 								</div>
 								<div class="c-member-list__preview-overlay">
 									<div class="c-member-list__preview-title">
-									<h2>{title}</h2>
+									<h2><?php echo $item->post_title ?></h2>
 									</div>
-									{.if categories}
+									<?php if($item_tags) : ?>
 									<div class="c-member-list__preview-categories">
-										{.repeated section categories}
-										<span class="c-member-list__preview-category">{@}</span>
-										{.alternates with},
-										{.end}  
+										<?php foreach ( $item_tags as $indx => $tag ) : ?>
+										<span class="c-member-list__preview-category"><?php echo $tag->name?></span>,
+										<?php endforeach; ?>
 									</div>
-									{.end}
+									<?php endif; ?>
 								</div>
 								</li>
 							<?php endif; ?>
 							<?php if ($indx === 2) : ?>
 								<li class="c-member-list__item">
 								<div class="c-member-list__preview-image-container">
-									<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" loading="lazy" alt="{title}"/>
+									<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo $item->post_title ?>"/>
 								</div>
 								<div class="c-member-list__preview-overlay">
 									<div class="c-member-list__preview-title">
-									<h2>{title}</h2>
+									<h2><?php echo $item->post_title ?></h2>
 									</div>
-									{.if categories}
+									<?php if($item_tags) : ?>
 									<div class="c-member-list__preview-categories">
-										{.repeated section categories}
-										<span class="c-member-list__preview-category">{@}</span>
-										{.alternates with},
-										{.end}  
+										<?php foreach ( $item_tags as $indx => $tag ) : ?>
+										<span class="c-member-list__preview-category"><?php echo $tag->name?></span>,
+										<?php endforeach; ?>
 									</div>
-									{.end}
+									<?php endif; ?>
 								</div>
 								</li>
 								<li class="c-member-list__item-empty"></li>
@@ -231,20 +304,19 @@ Template Name: Home
 							<?php if ($indx > 2) : ?>
 								<li class="c-member-list__item">
 								<div class="c-member-list__preview-image-container">
-									<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" loading="lazy" alt="{title}"/>
+									<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo $item->post_title ?>"/>
 								</div>
 								<div class="c-member-list__preview-overlay">
 									<div class="c-member-list__preview-title">
-									<h2>{title}</h2>
+									<h2><?php echo $item->post_title ?></h2>
 									</div>
-									{.if categories}
+									<?php if($item_tags) : ?>
 									<div class="c-member-list__preview-categories">
-										{.repeated section categories}
-										<span class="c-member-list__preview-category">{@}</span>
-										{.alternates with},
-										{.end}  
+										<?php foreach ( $item_tags as $indx => $tag ) : ?>
+										<span class="c-member-list__preview-category"><?php echo $tag->name?></span>,
+										<?php endforeach; ?>
 									</div>
-									{.end}
+									<?php endif; ?>
 								</div>
 								</li>
 							<?php endif; ?>

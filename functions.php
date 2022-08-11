@@ -92,11 +92,11 @@ function getVideoType($url) {
 };
 
 function getId($url, $type) {
-  if($type === "youtube") {
-    preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user|shorts)\/))([^\?&\"'>]+)/", $url, $output_array);
+	if($type === "youtube") {
+		preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user|shorts)\/))([^\?&\"'>]+)/", $url, $output_array);
     return "https://www.youtube.com/watch?v=" . $output_array[1] . "?origin=https://plyr.io&amp;iv_load_policy=3&amp;modestbranding=1&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;enablejsapi=1";
   } else if($type === "vimeo") {
-    return $url . "&title=0&byline=0&portrait=0";
+		return $url . "&title=0&byline=0&portrait=0";
   } else {
     return "unknown";
   }
@@ -104,3 +104,23 @@ function getId($url, $type) {
 
 // Add post thumbnail support
 add_theme_support('post-thumbnails');
+
+
+
+
+// add_action('wp_head', 'show_template');
+// function show_template() {
+//     global $template;
+//     echo basename($template);
+// }
+
+// Disable editor by post IDs
+// function tn_disable_visual_editor( $can ) {
+// 	global $post;
+// 	if (
+// 		33 == $post->ID
+// 	)
+// 	return false;
+// 	return $can;
+// 	}
+// 	add_filter( 'user_can_richedit', ' tn_disable_visual_editor ' );

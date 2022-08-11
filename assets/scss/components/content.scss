@@ -6,11 +6,13 @@
     margin-bottom: 1em;
     font-size: 1.375rem;
     line-height: 1.181em;
+    font-weight: 400;
   }
   p {
     font-family: $font-secondary;
     font-size: 1.125rem;
-    line-height: 1.222em;
+    line-height: 1.333em;
+    margin-bottom: 1.333em;
   }
   &.archive {
     & h2 {
@@ -26,13 +28,13 @@
   }
   &__columns {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    @include breakpoint(small) {
-      grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, 1fr);
+    @include breakpoint(medium_large) {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
   &__column {
-    @include breakpoint(medium_large) {
+    @include breakpoint(medium) {
       max-height: 100vh;
       overflow-y: scroll;
       // Hide scrollbar for IE, Edge and Firefox
@@ -43,13 +45,59 @@
         display: none;
       }
     }
+    &--inverse {
+      background-color: $color-light;
+    }
   }
   &__inner {
     &--padded {
-      padding: 4.5rem 7.5rem;
+      padding: 2.75rem 1.375rem;
+      // padding: 4.5rem 7.5rem;
+      // @include breakpoint(medium) {
+      //   padding: 1.375rem;
+      // }
       @include breakpoint(medium) {
-        padding: 1.375rem;
+        padding: 2.125rem;
       }
+      @include breakpoint(medium_large) {
+        padding: 4.25rem;
+      }
+    }
+  }
+  &__title {
+    margin-bottom: 0.75em!important;
+    color: $color-green;
+    font-weight: 400;
+    font-size: 2rem!important;
+    line-height: 2.0625rem!important;
+    text-transform: uppercase;
+    @include breakpoint(medium) {
+      font-size: 2.8125rem!important;
+      line-height: 2.875rem!important;
+    }
+  }
+  &__made-by {
+    margin-bottom: .375rem!important;
+    font-size: 1.125rem!important;
+    line-height: 1.1875rem!important;
+    text-transform: uppercase;
+    @include breakpoint(large) {
+      min-height: 1.4rem;
+      font-size: 1.125rem!important;
+      line-height: 1.1875rem!important;
+    }
+    @include breakpoint(wide) {
+      min-height: 1.4rem;
+      font-size: 1.375rem;
+      line-height: 1.625rem;
+    }
+  }
+  &__subtitle {
+    margin-bottom: 2rem!important;
+    text-transform: uppercase;
+    font-weight: 400;
+    @include breakpoint(medium) {
+      margin-bottom: 2rem!important;
     }
   }
 }
