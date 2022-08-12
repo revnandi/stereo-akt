@@ -1,24 +1,30 @@
+<?php 
+/*
+Template Name: Archive
+*/
+?>
+
 <?php get_header() ?>
 
 <?php
-// Create month name list by locale
+  // Create month name list by locale
 
-$locale = pll_current_language('locale');
-$dateFormatter = new IntlDateFormatter(
-		$locale,
-		IntlDateFormatter::LONG, // date type
-		IntlDateFormatter::NONE  // time type
-);
-$dateFormatter->setPattern('LLLL'); // full month name with NO DECLENSION ;-)
-$months_locale = [];
-for ($month_number = 1; $month_number <= 12; ++$month_number) {
-		$months_locale[] = $dateFormatter->format(
-				// 'n' => month number with no leading zeros
-				DateTime::createFromFormat('n', (string)$month_number)
-		);
-};
+  $locale = pll_current_language('locale');
+  $dateFormatter = new IntlDateFormatter(
+      $locale,
+      IntlDateFormatter::LONG, // date type
+      IntlDateFormatter::NONE  // time type
+  );
+  $dateFormatter->setPattern('LLLL'); // full month name with NO DECLENSION ;-)
+  $months_locale = [];
+  for ($month_number = 1; $month_number <= 12; ++$month_number) {
+      $months_locale[] = $dateFormatter->format(
+          // 'n' => month number with no leading zeros
+          DateTime::createFromFormat('n', (string)$month_number)
+      );
+  };
 
-pretty_dump($months_locale);
+  pretty_dump($months_locale);
 
 ?>
 
@@ -97,8 +103,7 @@ pretty_dump($months_locale);
 ?>
 
 <?php
-// Map dates
-
+  // Map dates
 
   $year_groups = groupBy($dates_list, 'year'); ?>
 
@@ -116,7 +121,7 @@ pretty_dump($months_locale);
             <?php foreach ($group_items as $group_item) : ?>
 
               <li class="c-archive__item">
-                <div class="c-archive__datetime"><?php echo $group_item['month']?> <?php echo $group_item['day']?>.</div>
+                <div class="c-archive__datetime"><?php echo $months_locale[$group_item['month']]?> <?php echo $group_item['day']?>.</div>
                 <a class="c-archive__link" href="<?php echo $group_item['url'] ?>">
                   <h2 class="c-archive__title"><?php echo $group_item['title']?></h2>
                 </a>

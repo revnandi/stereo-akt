@@ -1,9 +1,35 @@
 .c-archive {
+  padding: 2.75rem 1.375rem;
   @include breakpoint(medium) {
-    margin: 0 4.125rem;
+    padding: 2.125rem;
   }
-  & > * + * {
-    margin-top: 2.875rem;
+  @include breakpoint(medium_large) {
+    padding: 4.25rem;
+  }
+  // & > * + * {
+  //   margin-top: 2.875rem;
+  // }
+  // & > * + h3 {
+  //   margin-top: 0;
+  // }
+  // & h2 {
+  //   margin-bottom: 1em;
+  //   font-size: 2.8125rem;
+  //   line-height: 1.022em;
+  //   & strong {
+  //     font-weight: 400;
+  //   }
+  // }
+  // & h3 {
+  //   font-weight: 600;
+  //   font-size: 1.125rem;
+  // }
+  & a {
+    font-weight: 600;
+    color: #000;
+    text-decoration: none;
+  }
+  &__title {
   }
   &__section-title {
     margin: 0 0 2.875rem 0;
@@ -12,13 +38,31 @@
     line-height: 1.022em;
   }
   &__list {
+    display: column;
     padding: 0;
     margin: 0;
     list-style: none;
   }
-  &__title {
-    font-size: 1.125rem;
-    font-weight: 500;
-    line-height: 1.222em;
+  &__item {
+    display: flex;
+    width: 100%;
+    & > * {
+      font-weight: 400;
+      font-size: 1rem!important;
+      line-height: 1.333;
+      text-transform: uppercase;
+      @include breakpoint(medium_large) {
+        font-size: 1rem!important;
+      }
+      @include breakpoint(large) {
+        font-size: 1.125rem!important;
+      }
+      @include breakpoint(wide) {
+        font-size: 1.375rem;
+      }
+      & + * {
+        margin-left: 0.75em;
+      }
+    }
   }
 }

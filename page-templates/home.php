@@ -18,78 +18,78 @@ Template Name: Home
 				
 				<div class="c-content__column">
 
-				<?php
+					<?php
 
-					$dates_list = [];
+						$dates_list = [];
 
-					$events_meta_query = [
-						[
-							'key'     => 'dates_0_date_time',
-							'compare' => 'EXISTS',
-						]
-					];
+						$events_meta_query = [
+							[
+								'key'     => 'dates_0_date_time',
+								'compare' => 'EXISTS',
+							]
+						];
 
-					$events_args = array(  
-						'post_type' => 'performances',
-						'post_status' => 'publish',
-						'posts_per_page' => -1, 
-						'orderby' => 'title', 
-						'order' => 'ASC',
-						'meta_query'	=> $events_meta_query,
-					);
+						$events_args = array(  
+							'post_type' => 'performances',
+							'post_status' => 'publish',
+							'posts_per_page' => -1, 
+							'orderby' => 'title', 
+							'order' => 'ASC',
+							'meta_query'	=> $events_meta_query,
+						);
 
-					$events_loop = new WP_Query( $events_args );
+						$events_loop = new WP_Query( $events_args );
 
-					
-					if ( $events_loop->have_posts() ) :
+						
+						if ( $events_loop->have_posts() ) :
 
-						while ( $events_loop->have_posts() ) : $events_loop->the_post();
+							while ( $events_loop->have_posts() ) : $events_loop->the_post();
 
-							if( have_rows('dates') ):
+								if( have_rows('dates') ):
 
-								// Loop through rows.
-								while( have_rows('dates') ) : the_row();
-							
-									// Load sub field value.
-									$date_time = get_sub_field('date_time');
-									$subtitle = get_sub_field('subtitle');
-									$location = get_sub_field('location');
-									// Do something...
-									// pretty_dump($date_time);
+									// Loop through rows.
+									while( have_rows('dates') ) : the_row();
+								
+										// Load sub field value.
+										$date_time = get_sub_field('date_time');
+										$subtitle = get_sub_field('subtitle');
+										$location = get_sub_field('location');
+										// Do something...
+										// pretty_dump($date_time);
 
-									$obj_to_add = (object) [
-										'date' => $date_time,
-										'title'	=> get_the_title(),
-										'url' => get_permalink(),
-										'subtitle' => $subtitle,
-										'location' => $location,
-									];
+										$obj_to_add = (object) [
+											'date' => $date_time,
+											'title'	=> get_the_title(),
+											'url' => get_permalink(),
+											'subtitle' => $subtitle,
+											'location' => $location,
+										];
 
+										
+										array_push($dates_list, $obj_to_add);
+										
+										// End loop.
+									endwhile;
 									
-									array_push($dates_list, $obj_to_add);
+									// No value.
+									else :
+										// Do something...
+									endif;
 									
-									// End loop.
+									// array_push($stack, "apple", "raspberry");
+									
 								endwhile;
 								
-								// No value.
-								else :
-									// Do something...
-								endif;
-								
-								// array_push($stack, "apple", "raspberry");
-								
-							endwhile;
+							endif;
 							
-						endif;
-						
 
-						function date_compare($a, $b)
-						{
-							$t1 = strtotime($a->date);
-							$t2 = strtotime($b->date);
-							return $t1 - $t2;
-						}
-				?>
+							function date_compare($a, $b)
+							{
+								$t1 = strtotime($a->date);
+								$t2 = strtotime($b->date);
+								return $t1 - $t2;
+							}
+					?>
 					
 					<div class="c-content__inner">
 					<?php if ( $dates_list ) : ?>
@@ -126,22 +126,7 @@ Template Name: Home
 
 					</div>
 
-				</div>
-
-			</div>
-			
-		</div>
-
-	</section>
-
-	<section>
-
-		<div class="c-content">
 				
-				<div class="c-content__columns">
-
-					<div class="c-content__column">
-
 					<?php
 
 						$dates_list = [];
@@ -158,7 +143,7 @@ Template Name: Home
 
 						$performances_loop = new WP_Query( $performances_args );
 
-						
+
 						if ( $performances_loop->have_posts() ) : ?>
 
 							<ul class="c-performance-list">
@@ -207,13 +192,13 @@ Template Name: Home
 						<?php endif;
 
 						wp_reset_postdata();
-							
+						
 					?>
+				
+				</div>
 
-					</div>
-					
-					<div class="c-content__column">
-					
+				<div class="c-content__column">
+				
 					<?php
 					
 						$members_args = array(  
@@ -331,10 +316,10 @@ Template Name: Home
 									
 					?>
 
-					</div>
+				</div>
 
 			</div>
-
+			
 		</div>
 
 	</section>

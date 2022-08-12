@@ -114,13 +114,16 @@ add_theme_support('post-thumbnails');
 //     echo basename($template);
 // }
 
-// Disable editor by post IDs
-// function tn_disable_visual_editor( $can ) {
-// 	global $post;
-// 	if (
-// 		33 == $post->ID
-// 	)
-// 	return false;
-// 	return $can;
-// 	}
-// 	add_filter( 'user_can_richedit', ' tn_disable_visual_editor ' );
+// Group arrays by key
+function groupBy($arr, $criteria): array
+{
+		return array_reduce($arr, function($accumulator, $item) use ($criteria) {
+				$key = (is_callable($criteria)) ? $criteria($item) : $item[$criteria];
+				if (!array_key_exists($key, $accumulator)) {
+						$accumulator[$key] = [];
+				}
+
+				array_push($accumulator[$key], $item);
+				return $accumulator;
+		}, []);
+};
