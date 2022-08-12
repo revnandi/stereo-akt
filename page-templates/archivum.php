@@ -24,8 +24,6 @@ Template Name: Archive
       );
   };
 
-  pretty_dump($months_locale);
-
 ?>
 
 <?php
@@ -110,6 +108,8 @@ Template Name: Archive
   <div class="c-page">
     <div class="c-archive">
 
+    <h1 class="c-archive__page-title"><?php the_title() ?></h1>
+
     <?php if ($year_groups) : ?>
 
       <?php foreach ($year_groups as $key => $group_items) : ?>
@@ -122,9 +122,11 @@ Template Name: Archive
 
               <li class="c-archive__item">
                 <div class="c-archive__datetime"><?php echo $months_locale[$group_item['month']]?> <?php echo $group_item['day']?>.</div>
+                <span> / </span>
                 <a class="c-archive__link" href="<?php echo $group_item['url'] ?>">
                   <h2 class="c-archive__title"><?php echo $group_item['title']?></h2>
                 </a>
+                <span> / </span>
                 <div class="c-archive__location"><?php echo $group_item['location']?></div>
               </li>
 

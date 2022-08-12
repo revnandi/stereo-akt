@@ -198,6 +198,14 @@ Template Name: Home
 				</div>
 
 				<div class="c-content__column">
+
+					<div class="c-content__inner c-content__inner--inverse c-content__inner--small-padded">
+						<?php the_content(); ?>
+					</div>
+
+					<div class="c-content__inner c-content__inner--small-padded">
+						<?php the_field('right_column'); ?>
+					</div>
 				
 					<?php
 					

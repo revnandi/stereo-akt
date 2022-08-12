@@ -28,30 +28,60 @@
     font-weight: 600;
     color: #000;
     text-decoration: none;
+    &:hover {
+      opacity: 0.5;
+    }
   }
-  &__title {
+  &__page-title {
+    font-size: 1.375rem;
+    font-weight: 400;
+    line-height: 1.4375rem;
+    @include breakpoint(medium_large) {
+      font-size: 2.8125rem;
+      font-weight: 400;
+      line-height: 1.022em;
+    }
   }
   &__section-title {
-    margin: 0 0 2.875rem 0;
-    font-size: 2.8125rem;
+    margin: 2.875rem 0;
+    font-size: 1.375rem;
     font-weight: 400;
-    line-height: 1.022em;
+    line-height: 1.4375rem;
+    @include breakpoint(medium_large) {
+      font-size: 2.8125rem;
+      font-weight: 400;
+      line-height: 1.022em;
+    }
   }
   &__list {
-    display: column;
+    display: flex;
+    flex-direction: column;
     padding: 0;
     margin: 0;
     list-style: none;
   }
   &__item {
     display: flex;
+    flex-direction: column;
+    align-items: baseline;
     width: 100%;
-    & > * {
+    & span {
+      display: none;
+      margin: 0 0.5em;
+    }
+    @include breakpoint(medium) {
+      display: flex;
+      flex-direction: row;
+      & span {
+        display: inline-block;
+      }
+    }
+    & > *, & > * > * {
       font-weight: 400;
-      font-size: 1rem!important;
+      font-size: .875rem!important;
       line-height: 1.333;
       text-transform: uppercase;
-      @include breakpoint(medium_large) {
+      @include breakpoint(medium) {
         font-size: 1rem!important;
       }
       @include breakpoint(large) {
@@ -60,9 +90,9 @@
       @include breakpoint(wide) {
         font-size: 1.375rem;
       }
-      & + * {
-        margin-left: 0.75em;
-      }
+    }
+    & + * {
+      margin-top: 0.75em;
     }
   }
 }
