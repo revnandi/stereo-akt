@@ -6,6 +6,12 @@
   padding: 0;
   margin: 0;
 
+  &__title {
+    padding: 2.75rem 1.375rem;
+    margin-bottom: 0!important;
+    font-size: 2rem!important;
+  }
+
   &__item {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
@@ -187,7 +193,8 @@
   &__more-link {
     text-transform: uppercase;
     text-decoration: none;
-    color: $color-dark;
+    font-weight: initial!important;
+    color: $color-dark!important;
     @include breakpoint(small) {
       display: contents;
       font-size: 1rem;

@@ -14,7 +14,7 @@
 
 						<div class="c-content__column">
 
-							<div class="c-content__inner c-content__inner--padded">
+							<div class="c-content__inner c-content__inner--padded c-content__inner--inverse">
 
 								<div class="c-content__meta">
 
@@ -41,7 +41,7 @@
 
 							<?php if ( get_field('right_column') ) : ?>
 
-								<div class="c-content__inner c-content__inner--padded">
+								<div class="c-content__inner c-content__inner--padded c-content__inner--inverse">
 
 									<?php the_field('right_column') ; ?>
 

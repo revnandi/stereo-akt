@@ -152,9 +152,9 @@ document.addEventListener("DOMContentLoaded", function(){
     };
   };
   
-  const hodworksSite = new SASite();
+  const stereoaktSite = new SASite();
 
-  console.log(hodworksSite);
+  console.log(stereoaktSite);
 });
 
 

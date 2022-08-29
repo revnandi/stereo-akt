@@ -1,6 +1,5 @@
 .c-page {
   background-color: $color-green;
   @include breakpoint(medium_large) {
-    // height: 100%;
   }
 }

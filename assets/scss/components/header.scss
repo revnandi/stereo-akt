@@ -27,6 +27,7 @@
       background-color: $color-dark;
     }
     @include breakpoint(medium) {
+      align-items: center;
       margin-left: 2.125rem;
     }
     @include breakpoint(medium_large) {
@@ -68,14 +69,14 @@
     @include breakpoint(medium) {
       display: flex;
       font-size: 2.5vw;
-      padding: 0.75em;
+      // padding: 0.75em;
     }
     @include breakpoint(large) {
       font-size: 2vw;
-      padding: 1em;
+      // padding: 1em;
     }
     @include breakpoint(wide) {
-      font-size: 1.854167vw;
+      font-size: 3vw;
     }
   }
   &__button-container {

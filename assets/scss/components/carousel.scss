@@ -7,7 +7,8 @@
   &__item {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 0;
+    padding-bottom: 25%;
     &:nth-child(odd) {
       background-color: $color-beige;
     }
@@ -34,6 +35,19 @@
     width: 100%;
   }
   &__arrow {
+    padding: 0.5rem;
+    border: none;
+    background-color: $color-dark;
+    & svg {
+      & path {
+        fill: $color-green;
+      }
+    }
+    &:first-child {
+      & svg {
+        transform: rotate(180deg);
+      }
+    }
     cursor: pointer;
     &:hover {
 

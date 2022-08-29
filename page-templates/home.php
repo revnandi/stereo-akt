@@ -93,7 +93,7 @@ Template Name: Home
 					
 					<div class="c-content__inner">
 					<?php if ( $dates_list ) : ?>
-						
+							<h2 class="c-events-list__title"><?php pll_e('Programme'); ?></h2>
 							<ul class="c-events-list">
 									<?php foreach ( $dates_list as $item ) : ?>
 									<li class="c-events-list__item">
@@ -146,6 +146,8 @@ Template Name: Home
 
 						if ( $performances_loop->have_posts() ) : ?>
 
+							<h2 class="c-performance-list__title"><?php pll_e('Repertoire'); ?></h2>
+
 							<ul class="c-performance-list">
 							
 							<?php while ( $performances_loop->have_posts() ) : $performances_loop->the_post(); ?>
@@ -194,12 +196,16 @@ Template Name: Home
 						wp_reset_postdata();
 						
 					?>
+
+						<a class="c-performance-list__all-link" href="<?php echo pll_current_language() === "hu" ? "/eloadasok-projektek/" : "/en/performances-projects/" ?>">
+							<?php pll_e('Further Performances/Projects'); ?>
+						</a>
 				
 				</div>
 
 				<div class="c-content__column">
 
-					<div class="c-content__inner c-content__inner--inverse c-content__inner--small-padded">
+					<div class="c-content__inner c-content__inner--auto-height c-content__inner--inverse c-content__inner--small-padded c-content__inner--fixed-typography">
 						<?php the_content(); ?>
 					</div>
 
@@ -335,6 +341,5 @@ Template Name: Home
 </div>
 
 </main>
-
 
 <?php get_footer(); ?>

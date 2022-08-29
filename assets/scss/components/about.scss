@@ -1,0 +1,160 @@
+.c-about {
+  background-color: $color-beige;
+  @include breakpoint(medium) {
+    height: 100%;
+  }
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    padding: 1.375rem;
+    @include breakpoint(medium) {
+      flex-direction: row;
+    }
+    @include breakpoint(medium) {
+      padding: 2.125rem;
+    }
+    @include breakpoint(medium_large) {
+      padding: 4.25rem;
+    }
+  }
+  &__title {
+    * {
+      margin: 3rem 0 1.5rem 0;
+      font-size: 1.375rem;
+      font-weight: 400;
+      line-height: 1.181em;
+      text-transform: uppercase;
+    }
+  }
+  &__content {
+    font-size: 2.8125rem;
+    font-weight: 400;
+    line-height: 1em;
+    color: $color-green;
+    @include breakpoint(small) {
+      font-size: 1.375rem;
+    }
+    p {
+      margin-bottom: 0;
+    }
+  }
+  &__emails {
+    margin-bottom: 2rem;
+    @include breakpoint(medium) {
+      margin-bottom: 0;
+      width: 50%;
+      padding-right: 1rem;
+    }
+    & p {
+      margin-bottom: 0.75em;
+      font-family: $font-secondary;
+      font-size: 1.125rem;
+      line-height: 1.222em;
+      text-transform: uppercase;
+    }
+    & a {
+      color: $color-dark;
+      font-family: $font-primary;
+      font-size: 2rem;
+      line-height: 1.022em;
+      text-transform: lowercase;
+      text-decoration: none;
+      @include breakpoint(medium_large) {
+        font-size: 2.8125rem;
+        line-height: 1.022em;
+      }
+    }
+  }
+  &__dynamic-content {
+    @include breakpoint(medium) {
+      width: 50%;
+      padding-left: 1rem;
+    }
+    & h2 {
+      font-size: 2.8125rem;
+      line-height: 1.022em;
+    }
+    & p {
+      & + * {
+        margin-top: 1em;
+      }
+    }
+  } 
+  &__grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #000;
+  } 
+  &__grid-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  &__grid-block {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: $color-purple;
+    font-size: 15vw;
+    @include breakpoint(medium) {
+      font-size: 12vw;
+    }
+    @include breakpoint(medium_large) {
+      font-size: 12vw;
+    }
+    @include breakpoint(large) {
+      font-size: 15vw;
+    }
+  }
+  &__sub-grid {
+    display: grid;
+    background-color: $color-purple;
+  }
+  &__sub-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+    grid-column: 1 / span 2;
+  }
+  &__grid-block-s {
+    grid-column: 1 / span 1;
+  }
+  &__grid-block-staff {
+    grid-column: 1 / span 1;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 13%;
+    font-size: .875rem;
+    line-height: 1.214em;
+    text-transform: uppercase;
+  }
+  &__grid-block-a {
+    grid-column: 2 / span 1;
+  }
+  &__data-container {
+    padding: 1.375rem;
+    @include breakpoint(medium) {
+      padding: 0 2.125rem 2.125rem 2.125rem;
+    }
+    @include breakpoint(medium_large) {
+      padding: 0 4.25rem 4.25rem 4.25rem;
+    }
+  }
+  &__data-title {
+    margin-bottom: 1em;
+  }
+  &__data-list {
+    display: flex;
+    flex-direction: column;
+  }
+  &__data-link {
+    color: $color-dark;
+    font-weight: 700;
+    text-decoration: none;
+    & + * {
+      margin-top: 0.25em;
+    }
+  }
+}

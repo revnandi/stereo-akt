@@ -84,7 +84,7 @@ Template Name: Archive
 
           // Sort array
           usort($dates_list, function ($a, $b) {
-            return $a['date'] - $b['date'];
+            return $b['date'] - $a['date'];
           });
 
           // No value.

@@ -2,19 +2,8 @@
   float: none;
   display: flex;
   width: 100%;
-  // width: 100%;
   @include breakpoint(small) {
     justify-content: flex-start;
-    // z-index: 1;
-    // position: fixed;
-    // top: 0;
-    // left: 0;
-    // display: flex;
-    // width: 100%;
-    // height: 100%;
-    // margin: 0;
-    // // padding: 1rem 1.125rem;
-    // background: $color-green;
   }
   &__list {
     display: flex;
@@ -27,9 +16,12 @@
     & > * + * {
       margin: .3125rem 0 0 0;
       @include breakpoint(medium) {
-        margin: 0 0 0 1.25rem;
+        margin: 0 0 0 0.625rem;
       }
       @include breakpoint(medium_large) {
+        margin: 0 0 0 1.25rem;
+      }
+      @include breakpoint(large) {
         margin: 0 0 0 2.5rem;
       }
     }
@@ -47,6 +39,9 @@
       font-size: 1rem;
     }
     @include breakpoint(medium_large) {
+      font-size: 1.25rem;
+    }
+    @include breakpoint(large) {
       font-size: 1.375rem;
     }
   }

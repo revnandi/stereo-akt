@@ -7,7 +7,14 @@ if( $images ): ?>
 				<ul class="c-hero__slider-list list splide__list">
 					<?php foreach( $images as $image ): ?>
 					<li class="c-hero__slider-item splide__slide">
-						<img class="c-hero__slider-image" src="<?php echo esc_url($image['sizes']['1536x1536']); ?>"
+						<img
+							class="c-hero__slider-image lazyload"
+							src="<?php echo esc_url($image['sizes']['lqip']); ?>"
+							data-srcset="<?php echo esc_url($image['sizes']['medium']); ?> 300w,
+							<?php echo esc_url($image['sizes']['medium_large']); ?> 768w,
+							<?php echo esc_url($image['sizes']['large']); ?> 1024w,
+							<?php echo esc_url($image['sizes']['1536x1536']); ?> 1536w,
+							<?php echo esc_url($image['sizes']['2048x2048']); ?> 2048w"
 							alt="<?php echo esc_attr($image['alt']); ?>" />
 					</li>
 					<?php endforeach; ?>

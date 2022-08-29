@@ -127,3 +127,11 @@ function groupBy($arr, $criteria): array
 				return $accumulator;
 		}, []);
 };
+
+// Add Polylang string translations
+add_action('init', function() {
+  pll_register_string('homepage_events_list_title', 'Programme');
+  pll_register_string('homepage_performance_list_all_link', 'Further Performances/Projects');
+  pll_register_string('homepage_performance_list_title', 'Repertoire');
+  pll_register_string('contact_public_data_title', 'Public Data');
+});

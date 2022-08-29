@@ -50,11 +50,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <button id="hodworks_menu_button" class="hamburger hamburger--squeeze" type="button">
-                    <span class="hamburger-box">
-                        <span class="hamburger-inner"></span>
-                    </span>
-                </button> -->
             </div>
         </div>
     </header>
