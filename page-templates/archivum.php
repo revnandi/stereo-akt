@@ -10,19 +10,39 @@ Template Name: Archive
   // Create month name list by locale
 
   $locale = pll_current_language('locale');
-  $dateFormatter = new IntlDateFormatter(
-      $locale,
-      IntlDateFormatter::LONG, // date type
-      IntlDateFormatter::NONE  // time type
-  );
-  $dateFormatter->setPattern('LLLL'); // full month name with NO DECLENSION ;-)
-  $months_locale = [];
-  for ($month_number = 1; $month_number <= 12; ++$month_number) {
-      $months_locale[] = $dateFormatter->format(
-          // 'n' => month number with no leading zeros
-          DateTime::createFromFormat('n', (string)$month_number)
-      );
-  };
+
+	$month_lists = [
+		'en_GB' => [
+			1 => 'January',
+			2 => 'February',
+			3 => 'March',
+			4 => 'April',
+			5 => 'May',
+			6 => 'June',
+			7 => 'July',
+			8 => 'August',
+			9 => 'Septedmber',
+			10 => 'October',
+			11 => 'November',
+			12 => 'December',
+		],
+		'hu_HU' => [
+			1 => 'Január',
+			2 => 'Február',
+			3 => 'Március',
+			4 => 'Április',
+			5 => 'Május',
+			6 => 'Június',
+			7 => 'Július',
+			8 => 'Augusztus',
+			9 => 'Szeptember',
+			10 => 'Október',
+			11 => 'November',
+			12 => 'December',
+		]
+	];
+
+	$months_locale = $month_lists[$locale];
 
 ?>
 
@@ -62,18 +82,21 @@ Template Name: Archive
           
             // Load sub field value.
             $date_time = get_sub_field('date_time');
-            $subtitle = get_sub_field('subtitle');
+            $subtitle = get_field('subtitle');
             $location = get_sub_field('location');
+            $is_time_hidden = get_sub_field('is_time_hidden');
 
             $obj_to_add = [
               'date' => strtotime($date_time),
               'year' => date('Y', strtotime($date_time)),
               'month' => date('n', strtotime($date_time)),
               'day' => date('j', strtotime($date_time)),
+              'time' => date('H:i', strtotime($date_time)),
               'title'	=> get_the_title(),
               'url' => get_permalink(),
               'subtitle' => $subtitle,
               'location' => $location,
+              'is_time_hidden' => $is_time_hidden,
             ];
             
             array_push($dates_list, $obj_to_add);
@@ -103,7 +126,7 @@ Template Name: Archive
 <?php
   // Map dates
 
-  $year_groups = groupBy($dates_list, 'year'); ?>
+  $year_groups = groupBy($dates_list, 'year');?>
 
   <div class="c-page">
     <div class="c-archive">
@@ -118,13 +141,22 @@ Template Name: Archive
           <h1 class="c-archive__section-title"><?php echo $key ?></h1>
           <ul class="c-archive__list">
 
+          <?php 
+          // Sort array
+          usort($group_items, function ($a, $b) {
+            return $a['date'] - $b['date'];
+          });?>
+
             <?php foreach ($group_items as $group_item) : ?>
 
               <li class="c-archive__item">
-                <div class="c-archive__datetime"><?php echo $months_locale[$group_item['month']]?> <?php echo $group_item['day']?>.</div>
+                <div class="c-archive__datetime"><?php echo $months_locale[$group_item['month']]?> <?php echo $group_item['day']?>. <?php echo ($group_item['is_time_hidden'] || $group_item['time'] === '00:00') ? '' :  $group_item['time'] ?></div>
                 <span> / </span>
                 <a class="c-archive__link" href="<?php echo $group_item['url'] ?>">
-                  <h2 class="c-archive__title"><?php echo $group_item['title']?></h2>
+                  <h2 class="c-archive__title">
+                    <?php echo $group_item['title']?>
+                    <?php echo ($group_item['subtitle']) ? '- ' . $group_item['subtitle'] : ''?>
+                </h2>
                 </a>
                 <span> / </span>
                 <div class="c-archive__location"><?php echo $group_item['location']?></div>

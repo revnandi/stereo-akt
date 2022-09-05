@@ -54,6 +54,7 @@ Template Name: Home
 										$date_time = get_sub_field('date_time');
 										$subtitle = get_sub_field('subtitle');
 										$location = get_sub_field('location');
+										$ticket_url = get_sub_field('ticket_url');
 										// Do something...
 										// pretty_dump($date_time);
 
@@ -63,10 +64,13 @@ Template Name: Home
 											'url' => get_permalink(),
 											'subtitle' => $subtitle,
 											'location' => $location,
+											'ticket_url' => $ticket_url,
 										];
 
-										
-										array_push($dates_list, $obj_to_add);
+										// pretty_dump(strtotime($obj_to_add->date));
+										if (time() < strtotime($obj_to_add->date)) :
+											array_push($dates_list, $obj_to_add);
+										endif;
 										
 										// End loop.
 									endwhile;
@@ -91,7 +95,7 @@ Template Name: Home
 							}
 					?>
 					
-					<div class="c-content__inner">
+					<div class="c-content__inner c-content__inner--auto-height">
 					<?php if ( $dates_list ) : ?>
 							<h2 class="c-events-list__title"><?php pll_e('Programme'); ?></h2>
 							<ul class="c-events-list">
@@ -100,7 +104,7 @@ Template Name: Home
 										<div class="c-events-list__preview-date">
 										<div class="c-events-list__preview-dates">
 											<span><?php echo date('m.d.', strtotime($item->date)) ?></span>
-											<span><?php echo date('H.i.', strtotime($item->date)) ?></span>
+											<span><?php echo date('H:i&#20;&#20;', strtotime($item->date)) ?></span>
 										</div>
 										</div>
 										<div class="c-events-list__preview-info">
@@ -111,7 +115,11 @@ Template Name: Home
 											<div class="c-events-list__preview-location"><?php echo $item->location ?></div>
 										</div>
 										<div class="c-events-list__more-button-container">
-											<a class="c-events-list__more-link" href="<?php echo $item->url ?>">Több infó</a>
+											<?php if($item->ticket_url): ?>
+												<a class="c-events-list__more-link" href="<?php echo $item->ticket_url ?>"><?php pll_e('Tickets'); ?></a>
+											<?php else : ?>
+												<a class="c-events-list__more-link" href="<?php echo $item->url ?>"><?php pll_e('Learn More'); ?></a>
+											<?php endif; ?>
 										</div>
 									</li>
 									<?php endforeach; ?>
@@ -135,9 +143,9 @@ Template Name: Home
 							'post_type' => 'performances',
 							'post_status' => 'publish',
 							'posts_per_page' => -1, 
-							'orderby' => 'date', 
-							'order' => 'ASC',
-							'meta_key'		=> 'show_on_homepage',
+							'orderby' => 'menu_order', 
+							'order' => 'DSC',
+							'meta_key'		=> 'is_active',
 							'meta_value'	=> true
 						);
 
@@ -152,40 +160,40 @@ Template Name: Home
 							
 							<?php while ( $performances_loop->have_posts() ) : $performances_loop->the_post(); ?>
 
-								<?php
-									$item_image_lqip = wp_get_attachment_image_src((get_post_thumbnail_id( get_the_ID())), 'lqip');
-									$item_image = wp_get_attachment_image_src((get_post_thumbnail_id( get_the_ID())),  'medium_large');
-									$item_video = get_field('video');
-								?>	
+									<?php
+										$item_image_lqip = wp_get_attachment_image_src((get_post_thumbnail_id( get_the_ID())), 'lqip');
+										$item_image = wp_get_attachment_image_src((get_post_thumbnail_id( get_the_ID())),  'medium_large');
+										$item_video = get_field('video');
+									?>	
 
-								<li class="c-performance-list__item">
-									<div class="c-performance-list__preview-image-container">
-										<?php if ($item_image[0] ) : ?>
-											<img class="c-performance-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo the_title() ?>"/>
-										<?php endif; ?>
-									</div>
-									<div class="c-performance-list__preview-box">
-										<?php if ($item_video) : ?>
-											<button class="c-performance-list__preview-trailer-link" data-video-url="<?php echo getId($item_video, getVideoType($item_video)) ?>" target="_blank">Trailer</button>
-										<?php endif; ?>
-										<div class="c-performance-list__preview-info">
-											<div class="c-performance-list__preview-title">
-												<h2><?php echo the_title() ?></h2>
-											</div>
-											<div class="c-performance-list__preview-subtitle">
-												<?php the_field('subtitle') ?>
-											</div>
-											<div class="c-performance-list__preview-made-by">
-												<?php the_field('made_by') ?>
-											</div>
+									<li class="c-performance-list__item">
+										<div class="c-performance-list__preview-image-container">
+											<?php if ($item_image[0] ) : ?>
+												<img class="c-performance-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo the_title() ?>"/>
+											<?php endif; ?>
 										</div>
-										<a class="c-performance-list__preview-open-link" href="<?php echo the_permalink() ?>">
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.13 22.84">
-												<polyline points="0.35 0.35 11.42 11.42 0.35 22.48" style="fill: none;stroke: #000;stroke-miterlimit: 10"/>
-											</svg>
-										</a>
-									</div>
-								</li>
+										<div class="c-performance-list__preview-box">
+											<?php if ($item_video) : ?>
+												<button class="c-performance-list__preview-trailer-link" data-video-url="<?php echo getId($item_video, getVideoType($item_video)) ?>" target="_blank">Trailer</button>
+											<?php endif; ?>
+											<div class="c-performance-list__preview-info">
+												<div class="c-performance-list__preview-title">
+													<h2><?php echo the_title() ?></h2>
+												</div>
+												<div class="c-performance-list__preview-subtitle">
+													<?php the_field('subtitle') ?>
+												</div>
+												<div class="c-performance-list__preview-made-by">
+													<?php the_field('made_by') ?>
+												</div>
+											</div>
+											<a class="c-performance-list__preview-open-link" href="<?php echo the_permalink() ?>">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12.13 22.84">
+													<polyline points="0.35 0.35 11.42 11.42 0.35 22.48" style="fill: none;stroke: #000;stroke-miterlimit: 10"/>
+												</svg>
+											</a>
+										</div>
+									</li>
 									
 							<?php endwhile; ?>
 
