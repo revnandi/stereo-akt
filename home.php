@@ -4,14 +4,9 @@
 	<div class="c-content">
 
 		<?php if ( have_posts() ) : ?>
-		<div class="c-performance-project">
+		<div class="c-performance-projects">
 
 			<div class="c-performances-projects__wrapper">
-
-				<div class="c-performances-projects__header">
-					ELŐADÁSOK <br />
-					PROJEKTEK
-				</div>
 				<ul class="c-performances-projects__list">
 				<?php while ( have_posts() ) : the_post(); ?>
 
@@ -42,6 +37,11 @@
 
 				<?php endwhile; ?>
 				</ul>
+				
+				<div class="c-performances-projects__navigation">
+					<div class="c-performances-projects__navigation-button"><?php previous_posts_link( pll__('Previous Page') ); ?></div>
+					<div class="c-performances-projects__navigation-button"><?php next_posts_link( pll__('Next Page') ); ?></div>
+				</div>
 
 			</div>
 		</div>

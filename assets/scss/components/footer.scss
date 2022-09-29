@@ -10,9 +10,23 @@
     justify-content: flex-end;
     margin-bottom: 8.75rem;
     list-style: none;
+    @include breakpoint(small) {
+      list-style: none;
+      flex-direction: column;
+      padding: 0;
+      margin: 0;
+      margin-bottom: 8.75rem;
+      align-items: baseline;
+    }
   }
   &__navigation-item {
     margin-left: 2.5rem;
+    @include breakpoint(small) {
+      margin-left: 0;
+      & + * {
+        margin-top: 0.5em;
+      }
+    }
   }
   &__navigation-link {
     color: $color-green;
@@ -23,6 +37,9 @@
   &__bottom {
     display: flex;
     justify-content: space-between;
+    @include breakpoint(small) {
+      flex-wrap: wrap;
+    }
   }
   &__copyright {
     font-size: .875rem;
@@ -31,5 +48,9 @@
   &__imprint {
     font-size: .875rem;
     line-height: 1.214em;
+    @include breakpoint(small) {
+      margin-top: 1rem;
+      width: 100%;
+    }
   }
 }

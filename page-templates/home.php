@@ -59,7 +59,7 @@ Template Name: Home
 										// pretty_dump($date_time);
 
 										$obj_to_add = (object) [
-											'date' => $date_time,
+											'date' => strtotime($date_time),
 											'title'	=> get_the_title(),
 											'url' => get_permalink(),
 											'subtitle' => $subtitle,
@@ -67,8 +67,7 @@ Template Name: Home
 											'ticket_url' => $ticket_url,
 										];
 
-										// pretty_dump(strtotime($obj_to_add->date));
-										if (time() < strtotime($obj_to_add->date)) :
+										if (time() < $obj_to_add->date) :
 											array_push($dates_list, $obj_to_add);
 										endif;
 										
@@ -80,19 +79,14 @@ Template Name: Home
 										// Do something...
 									endif;
 									
-									// array_push($stack, "apple", "raspberry");
-									
 								endwhile;
 								
 							endif;
-							
 
-							function date_compare($a, $b)
-							{
-								$t1 = strtotime($a->date);
-								$t2 = strtotime($b->date);
-								return $t1 - $t2;
-							}
+							array_multisort(
+								array_column($dates_list, 'date'),
+								$dates_list
+							);
 					?>
 					
 					<div class="c-content__inner c-content__inner--auto-height">
@@ -103,12 +97,16 @@ Template Name: Home
 									<li class="c-events-list__item">
 										<div class="c-events-list__preview-date">
 										<div class="c-events-list__preview-dates">
-											<span><?php echo date('m.d.', strtotime($item->date)) ?></span>
-											<span><?php echo date('H:i&#20;&#20;', strtotime($item->date)) ?></span>
+											<span><?php echo date('m.d.', $item->date) ?></span>
+											<?php if(date('H:i', $item->date) != '00:00') : ?>
+												<span><?php echo date('H:i', $item->date) ?></span>
+											<?php endif; ?>
 										</div>
 										</div>
 										<div class="c-events-list__preview-info">
-										<h2 class="c-events-list__preview-title"><?php echo $item->title ?></h2>
+											<a class="c-events-list__preview-title" href="<?php echo $item->url ?>">
+												<h2><?php echo $item->title ?></h2>
+											</a>
 											<div class="c-events-list__preview-categories">
 												<span class="c-events-list__preview-category"><?php echo $item->subtitle ?></span>
 											</div>
@@ -116,7 +114,7 @@ Template Name: Home
 										</div>
 										<div class="c-events-list__more-button-container">
 											<?php if($item->ticket_url): ?>
-												<a class="c-events-list__more-link" href="<?php echo $item->ticket_url ?>"><?php pll_e('Tickets'); ?></a>
+												<a class="c-events-list__more-link" href="<?php echo $item->ticket_url ?>" target="_blank"><?php pll_e('Tickets'); ?></a>
 											<?php else : ?>
 												<a class="c-events-list__more-link" href="<?php echo $item->url ?>"><?php pll_e('Learn More'); ?></a>
 											<?php endif; ?>
@@ -248,21 +246,23 @@ Template Name: Home
 						
 							<?php if ($indx === 0) : ?>
 								<li class="c-member-list__item">
-								<div class="c-member-list__preview-image-container">
-									<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo $item->post_title ?>"/>
-								</div>
-								<div class="c-member-list__preview-overlay">
-									<div class="c-member-list__preview-title">
-									<h2><?php echo $item->post_title ?></h2>
-									</div>
-									<?php if($item_tags) : ?>
-									<div class="c-member-list__preview-categories">
-										<?php foreach ( $item_tags as $indx => $tag ) : ?>
-										<span class="c-member-list__preview-category"><?php echo $tag->name?></span>,
-										<?php endforeach; ?>
-									</div>
-									<?php endif; ?>
-								</div>
+									<a class="c-member-list__link" href="<?php echo get_permalink($item->ID); ?>" >
+										<div class="c-member-list__preview-image-container">
+											<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo $item->post_title ?>"/>
+										</div>
+										<div class="c-member-list__preview-overlay">
+											<div class="c-member-list__preview-title">
+											<h2><?php echo $item->post_title ?></h2>
+											</div>
+											<?php if($item_tags) : ?>
+											<div class="c-member-list__preview-categories">
+												<?php foreach ( $item_tags as $indx => $tag ) : ?>
+												<span class="c-member-list__preview-category"><?php echo $tag->name?></span>,
+												<?php endforeach; ?>
+											</div>
+											<?php endif; ?>
+										</div>
+									</a>
 								</li>
 								<li class="c-member-list__item-empty"></li>
 								<li class="c-member-list__item-empty">S</li>
@@ -270,61 +270,67 @@ Template Name: Home
 							<?php endif; ?>
 							<?php if ($indx === 1) : ?>
 								<li class="c-member-list__item">
-								<div class="c-member-list__preview-image-container">
-									<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo $item->post_title ?>"/>
-								</div>
-								<div class="c-member-list__preview-overlay">
-									<div class="c-member-list__preview-title">
-									<h2><?php echo $item->post_title ?></h2>
-									</div>
-									<?php if($item_tags) : ?>
-									<div class="c-member-list__preview-categories">
-										<?php foreach ( $item_tags as $indx => $tag ) : ?>
-										<span class="c-member-list__preview-category"><?php echo $tag->name?></span>,
-										<?php endforeach; ?>
-									</div>
-									<?php endif; ?>
-								</div>
+									<a class="c-member-list__link" href="<?php echo get_permalink($item->ID); ?>">
+										<div class="c-member-list__preview-image-container">
+											<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo $item->post_title ?>"/>
+										</div>
+										<div class="c-member-list__preview-overlay">
+											<div class="c-member-list__preview-title">
+											<h2><?php echo $item->post_title ?></h2>
+											</div>
+											<?php if($item_tags) : ?>
+											<div class="c-member-list__preview-categories">
+												<?php foreach ( $item_tags as $indx => $tag ) : ?>
+												<span class="c-member-list__preview-category"><?php echo $tag->name?></span>,
+												<?php endforeach; ?>
+											</div>
+											<?php endif; ?>
+										</div>
+									</a>
 								</li>
 							<?php endif; ?>
 							<?php if ($indx === 2) : ?>
 								<li class="c-member-list__item">
-								<div class="c-member-list__preview-image-container">
-									<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo $item->post_title ?>"/>
-								</div>
-								<div class="c-member-list__preview-overlay">
-									<div class="c-member-list__preview-title">
-									<h2><?php echo $item->post_title ?></h2>
-									</div>
-									<?php if($item_tags) : ?>
-									<div class="c-member-list__preview-categories">
-										<?php foreach ( $item_tags as $indx => $tag ) : ?>
-										<span class="c-member-list__preview-category"><?php echo $tag->name?></span>,
-										<?php endforeach; ?>
-									</div>
-									<?php endif; ?>
-								</div>
+									<a class="c-member-list__link" href="<?php echo get_permalink($item->ID); ?>">
+										<div class="c-member-list__preview-image-container">
+											<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo $item->post_title ?>"/>
+										</div>
+										<div class="c-member-list__preview-overlay">
+											<div class="c-member-list__preview-title">
+											<h2><?php echo $item->post_title ?></h2>
+											</div>
+											<?php if($item_tags) : ?>
+											<div class="c-member-list__preview-categories">
+												<?php foreach ( $item_tags as $indx => $tag ) : ?>
+												<span class="c-member-list__preview-category"><?php echo $tag->name?></span>,
+												<?php endforeach; ?>
+											</div>
+											<?php endif; ?>
+										</div>
+									</a>
 								</li>
 								<li class="c-member-list__item-empty"></li>
 								<li class="c-member-list__item-empty">A</li>
 							<?php endif; ?>
 							<?php if ($indx > 2) : ?>
 								<li class="c-member-list__item">
-								<div class="c-member-list__preview-image-container">
-									<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo $item->post_title ?>"/>
-								</div>
-								<div class="c-member-list__preview-overlay">
-									<div class="c-member-list__preview-title">
-									<h2><?php echo $item->post_title ?></h2>
-									</div>
-									<?php if($item_tags) : ?>
-									<div class="c-member-list__preview-categories">
-										<?php foreach ( $item_tags as $indx => $tag ) : ?>
-										<span class="c-member-list__preview-category"><?php echo $tag->name?></span>,
-										<?php endforeach; ?>
-									</div>
-									<?php endif; ?>
-								</div>
+									<a class="c-member-list__link" href="<?php echo get_permalink($item->ID); ?>">
+										<div class="c-member-list__preview-image-container">
+											<img class="c-member-list__preview-image lazyload" src="<?php echo $item_image_lqip[0] ?>" data-src="<?php echo $item_image[0] ?>" alt="<?php echo $item->post_title ?>"/>
+										</div>
+										<div class="c-member-list__preview-overlay">
+											<div class="c-member-list__preview-title">
+											<h2><?php echo $item->post_title ?></h2>
+											</div>
+											<?php if($item_tags) : ?>
+											<div class="c-member-list__preview-categories">
+												<?php foreach ( $item_tags as $indx => $tag ) : ?>
+												<span class="c-member-list__preview-category"><?php echo $tag->name?></span><?php if(!(count($item_tags) == $indx + 1)) : ?>,<?php endif; ?>
+												<?php endforeach; ?>
+											</div>
+											<?php endif; ?>
+										</div>
+									</a>
 								</li>
 							<?php endif; ?>
 							<?php endforeach; ?>

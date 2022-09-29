@@ -66,7 +66,10 @@ document.addEventListener("DOMContentLoaded", function(){
           perMove: 1,
           lazyLoad: true,
           breakpoints: {
-            769: {
+            880: {
+              perPage: 1,
+            },
+            1023: {
               perPage: 2,
             },
           },

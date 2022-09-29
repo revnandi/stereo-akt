@@ -121,4 +121,35 @@
       width: 0.687rem;
     }
   }
+  &__navigation {
+    display: flex;
+    flex-direction: column;
+    @include breakpoint(medium) {
+      flex-direction: row;
+    }
+  }
+  &__navigation-button {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-column: 5 / span 4;
+    grid-row: 1 / span 1;
+    padding: 1rem;
+    border: none;
+    background-color: $color-dark;
+    font-size: 1.375rem;
+    line-height: 1.181em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s opacity ease;
+    & a {
+      color: $color-purple;
+      text-decoration: none;
+    }
+    &:hover {
+      opacity: 0.85;
+    }
+  }
 }

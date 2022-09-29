@@ -23,13 +23,13 @@
 
     width: 1rem;
     height: 1rem;
-    @include breakpoint(medium_large) {
+    @include breakpoint(large) {
       width: 1.5rem;
       height: 2rem;
     }
     &:first-child {
       & img {
-        @include breakpoint(medium_large) {
+        @include breakpoint(large) {
           max-height: 1.5rem;
           height: 1.5rem;
         }

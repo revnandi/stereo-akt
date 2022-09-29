@@ -32,6 +32,59 @@
 
 								</div>
 
+								<?php if( have_rows('dates') ):  $has_future_event = false ?>
+
+									<?php foreach(get_field('dates') as $date) : ?>
+										
+										<?php if(time() < strtotime($date['date_time'])) : ?>
+											
+											<?php $has_future_event = true; ?>
+
+										<?php endif; ?>
+
+									<?php endforeach; ?>
+									
+									<?php if($has_future_event) : ?>
+
+										<div class="c-content__dates">
+
+											<h2><?php pll_e('Performances'); ?></h2>
+
+									<?php endif; ?>
+
+										<?php while( have_rows('dates') ) : the_row(); ?>
+
+												<?php
+													$date_field = get_sub_field('date_time');
+
+													if(time() < strtotime($date_field)) : ?>
+
+														<div class="c-content__date-item">
+															<span><?php echo date('Y.m.d.', strtotime($date_field)) ?></span>
+
+															<?php if(date('H:i', strtotime($date_field)) != '00:00') : ?>
+																<span><?php echo date('H:i&#20;&#20;', strtotime($date_field)) ?></span>
+															<?php endif; ?>
+
+															<span><?php the_sub_field('location'); ?></span>
+
+															<?php if(get_sub_field('ticket_url')): ?>
+																<a class="c-content__date-ticket" href="<?php echo get_sub_field('ticket_url') ?>" target="_blank"><?php pll_e('Tickets'); ?></a>
+															<?php endif; ?>
+
+														</div>
+
+													<?php endif; 
+												?>
+
+										<?php endwhile; ?>
+										
+									<?php if($has_future_event) : ?>
+										</div>
+									<?php endif; ?>
+
+								<?php endif; ?>
+
 								<?php the_content(); ?>
 
 							</div>

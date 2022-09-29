@@ -138,4 +138,7 @@ add_action('init', function() {
   pll_register_string('homepage_tickets', 'Tickets');
   pll_register_string('projects', 'Past');
   pll_register_string('projects', 'Satellite Projects');
+	pll_register_string('blog_prev', 'Previous Page');
+  pll_register_string('blog_next', 'Next Page');
+  pll_register_string('performance_single_page', 'Performances');
 });

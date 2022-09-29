@@ -1,6 +1,8 @@
 .c-carousel {
   position: relative;
-  aspect-ratio: 4 / 1;
+  @include breakpoint(medium) {
+    aspect-ratio: 4 / 1;
+  }
   &__inner {
     height: 100%;
   }
@@ -8,7 +10,10 @@
     position: relative;
     width: 100%;
     height: 0;
-    padding-bottom: 25%;
+    padding-bottom: 65%;
+    @include breakpoint(medium) {
+      padding-bottom: 25%;
+    }
     &:nth-child(odd) {
       background-color: $color-beige;
     }
@@ -33,8 +38,10 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    pointer-events: none;
   }
   &__arrow {
+    pointer-events: all;
     padding: 0.5rem;
     border: none;
     background-color: $color-dark;
