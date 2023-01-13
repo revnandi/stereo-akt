@@ -1,4 +1,9 @@
 <?php
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) )
+    exit;  
+    
 /*
  * VITE & Tailwind JIT development
  * Inspired by https://github.com/andrefelipe/vite-php-setup
@@ -15,7 +20,6 @@ define('DIST_PATH', get_template_directory() . '/' . DIST_DEF);
 // js enqueue settings
 define('JS_DEPENDENCY', array()); // array('jquery') as example
 define('JS_LOAD_IN_FOOTER', true); // load scripts in footer?
-
 // deafult server address, port and entry point can be customized in vite.config.json
 define('VITE_SERVER', 'http://localhost:3000');
 define('VITE_ENTRY_POINT', '/main.js');

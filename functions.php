@@ -69,7 +69,7 @@ function add_menu_link_class($atts, $item, $args) {
 add_filter('nav_menu_link_attributes', 'add_menu_link_class', 1, 3);
 
 class My_Walker_Nav_Menu extends Walker_Nav_Menu {
-  function start_lvl(&$output, $depth) {
+  function start_lvl(&$output, $depth = 0, $args = null) {
     $indent = str_repeat("\t", $depth);
     $output .= "\n$indent<ul class=\"c-main-navigation__sub-list\">\n";
   }

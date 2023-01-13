@@ -3,6 +3,7 @@ import Splide from '@splidejs/splide';
 import urlParser from 'js-video-url-parser/lib/base';
 import { VimeoParseResult } from 'js-video-url-parser/lib/provider/vimeo';
 import { YouTubeParseResult } from 'js-video-url-parser/lib/provider/youtube';
+import BigPicture from 'bigpicture'
 import lazySizes from 'lazysizes';
 import 'lazysizes/plugins/blur-up/ls.blur-up';
 
@@ -28,7 +29,8 @@ document.addEventListener("DOMContentLoaded", function(){
         embededVideo: document.getElementById('stereoakt_embeded_video'),
         trailerButtons: document.querySelectorAll('.c-performance-list__preview-trailer-link'),
         hamburgerButton: document.getElementById('stereoakt_nav_menu_close_button'),
-        menuContainer: document.getElementById('stereoakt_menu_container')
+        menuContainer: document.getElementById('stereoakt_menu_container'),
+        galleryImages: document.querySelectorAll('.c-carousel__item'),
       },
       this.widgets = {},
 
@@ -58,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function(){
         } ).mount();
       };
       if(this.elements.imageCarousel) {
-        console.log(this.elements.imageCarousel);
         this.widgets.imageCarousel = new Splide( this.elements.imageCarousel, {
           type : 'loop',
           pagination: false,
@@ -85,6 +86,18 @@ document.addEventListener("DOMContentLoaded", function(){
       if(this.elements.embededVideo) {
         this.widgets.embededVideo = new Plyr(this.elements.embededVideo);
       };
+      if(this.elements.galleryImages && this.elements.galleryImages.length > 0) {
+        this.elements.galleryImages.forEach((item) => {
+          item.addEventListener('click', (e) => {
+            e.preventDefault()
+            this.widgets.bigPicture = BigPicture({
+              el: e.currentTarget,
+              gallery: '#stereoakt_image_gallery',
+              galleryAttribute: 'data-bp',
+            })
+          })
+        })
+      };
     };
 
     bindEvents() {
@@ -97,7 +110,6 @@ document.addEventListener("DOMContentLoaded", function(){
         for (let i = 0; i < this.elements.trailerButtons.length; i++) {
           this.elements.trailerButtons[i].addEventListener('click', () => {
             if(window.innerWidth < 769) {
-              console.log(this.elements.trailerButtons[i].dataset.videoUrl);
               window.open(this.elements.trailerButtons[i].dataset.videoUrl);
             } else {
               const videoUrl = this.elements.trailerButtons[i].dataset.videoUrl;
