@@ -2764,6 +2764,10 @@ a.plyr__control::after, a.plyr__control::before {
   width: 100%;
   height: 100%;
 }
+.c-hero__slider-item.is-active {
+  position: absolute !important;
+  transform: none !important;
+}
 .c-hero__slider-image {
   position: absolute;
   top: 0;
@@ -3732,4 +3736,38 @@ a.plyr__control::after, a.plyr__control::before {
 }
 .c-about__data-link + * {
   margin-top: 0.25em;
+}
+.c-supporters {
+  background-color: #FFF;
+}
+.c-supporters__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  justify-content: center;
+}
+@media (min-width: 881px) {
+  .c-supporters__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1300px) {
+  .c-supporters__grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+@media (min-width: 1400px) {
+  .c-supporters__grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+.c-supporters__image-container {
+  aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+.c-supporters__image {
+  width: 100%;
 }

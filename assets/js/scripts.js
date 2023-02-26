@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function(){
   
   const stereoaktSite = new SASite();
 
-  console.log(stereoaktSite);
+  // console.log(stereoaktSite);
 });
 
 

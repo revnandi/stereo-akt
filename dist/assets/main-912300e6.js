@@ -6769,7 +6769,6 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     }
   }
-  const stereoaktSite = new SASite();
-  console.log(stereoaktSite);
+  new SASite();
 });
 console.log("main.js");

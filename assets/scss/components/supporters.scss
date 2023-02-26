@@ -1,0 +1,28 @@
+.c-supporters {
+  background-color: $color-light;
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-content: center;
+    @include breakpoint(medium) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @include breakpoint(large) {
+      grid-template-columns: repeat(5, 1fr);
+    }
+    @include breakpoint(wide) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+  &__image-container {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+  }
+  &__image {
+    width: 100%;
+  }
+}

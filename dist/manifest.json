@@ -1,14 +1,14 @@
 {
   "main.css": {
-    "file": "assets/main-58c07d60.css",
+    "file": "assets/main-aa951885.css",
     "src": "main.css"
   },
   "main.js": {
-    "file": "assets/main-b32c73ba.js",
+    "file": "assets/main-912300e6.js",
     "src": "main.js",
     "isEntry": true,
     "css": [
-      "assets/main-58c07d60.css"
+      "assets/main-aa951885.css"
     ]
   }
 }

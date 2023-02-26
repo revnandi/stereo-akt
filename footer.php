@@ -48,6 +48,8 @@
         </script>
     </footer>
 
+    <?php require get_template_directory() . '/partials/supporters.php'; ?>
+
     <?php wp_footer() ?>
     </body>
 
