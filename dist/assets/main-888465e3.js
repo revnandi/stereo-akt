@@ -1,6 +1,22 @@
 const styles = "";
 function _defineProperty$1(e, t, i) {
-  return t in e ? Object.defineProperty(e, t, { value: i, enumerable: true, configurable: true, writable: true }) : e[t] = i, e;
+  return (t = _toPropertyKey(t)) in e ? Object.defineProperty(e, t, { value: i, enumerable: true, configurable: true, writable: true }) : e[t] = i, e;
+}
+function _toPrimitive(e, t) {
+  if ("object" != typeof e || null === e)
+    return e;
+  var i = e[Symbol.toPrimitive];
+  if (void 0 !== i) {
+    var s = i.call(e, t || "default");
+    if ("object" != typeof s)
+      return s;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === t ? String : Number)(e);
+}
+function _toPropertyKey(e) {
+  var t = _toPrimitive(e, "string");
+  return "symbol" == typeof t ? t : String(t);
 }
 function _classCallCheck(e, t) {
   if (!(e instanceof t))
@@ -159,7 +175,8 @@ function repaint(e, t) {
     }
   }, t);
 }
-const browser = { isIE: Boolean(window.document.documentMode), isEdge: /Edge/g.test(navigator.userAgent), isWebkit: "WebkitAppearance" in document.documentElement.style && !/Edge/g.test(navigator.userAgent), isIPhone: /iPhone|iPod/gi.test(navigator.userAgent) && navigator.maxTouchPoints > 1, isIos: /iPad|iPhone|iPod/gi.test(navigator.userAgent) && navigator.maxTouchPoints > 1 };
+const isIE = Boolean(window.document.documentMode), isEdge = /Edge/g.test(navigator.userAgent), isWebKit = "WebkitAppearance" in document.documentElement.style && !/Edge/g.test(navigator.userAgent), isIPhone = /iPhone|iPod/gi.test(navigator.userAgent) && navigator.maxTouchPoints > 1, isIPadOS = "MacIntel" === navigator.platform && navigator.maxTouchPoints > 1, isIos = /iPad|iPhone|iPod/gi.test(navigator.userAgent) && navigator.maxTouchPoints > 1;
+var browser = { isIE, isEdge, isWebKit, isIPhone, isIPadOS, isIos };
 function cloneDeep(e) {
   return JSON.parse(JSON.stringify(e));
 }
@@ -268,11 +285,11 @@ function getElement(e) {
   return this.elements.container.querySelector(e);
 }
 function setFocus(e = null, t = false) {
-  is.element(e) && (e.focus({ preventScroll: true }), t && toggleClass$1(e, this.config.classNames.tabFocus));
+  is.element(e) && e.focus({ preventScroll: true, focusVisible: t });
 }
-const defaultCodecs = { "audio/ogg": "vorbis", "audio/wav": "1", "video/webm": "vp8, vorbis", "video/mp4": "avc1.42E01E, mp4a.40.2", "video/ogg": "theora" }, support = { audio: "canPlayType" in document.createElement("audio"), video: "canPlayType" in document.createElement("video"), check(e, t, i) {
-  const s = browser.isIPhone && i && support.playsinline, n = support[e] || "html5" !== t;
-  return { api: n, ui: n && support.rangeInput && ("video" !== e || !browser.isIPhone || s) };
+const defaultCodecs = { "audio/ogg": "vorbis", "audio/wav": "1", "video/webm": "vp8, vorbis", "video/mp4": "avc1.42E01E, mp4a.40.2", "video/ogg": "theora" }, support = { audio: "canPlayType" in document.createElement("audio"), video: "canPlayType" in document.createElement("video"), check(e, t) {
+  const i = support[e] || "html5" !== t;
+  return { api: i, ui: i && support.rangeInput };
 }, pip: !(browser.isIPhone || !is.function(createElement("video").webkitSetPresentationMode) && (!document.pictureInPictureEnabled || createElement("video").disablePictureInPicture)), airplay: is.function(window.WebKitPlaybackTargetAvailabilityEvent), playsinline: "playsInline" in document.createElement("video"), mime(e) {
   if (is.empty(e))
     return false;
@@ -522,43 +539,41 @@ function fetch(e, t = "text") {
 function loadSprite(e, t) {
   if (!is.string(e))
     return;
-  const i = is.string(t);
-  let s = false;
-  const n = () => null !== document.getElementById(t), r = (e2, t2) => {
-    e2.innerHTML = t2, i && n() || document.body.insertAdjacentElement("afterbegin", e2);
+  const i = "cache", s = is.string(t);
+  let n = false;
+  const r = () => null !== document.getElementById(t), a = (e2, t2) => {
+    e2.innerHTML = t2, s && r() || document.body.insertAdjacentElement("afterbegin", e2);
   };
-  if (!i || !n()) {
-    const n2 = Storage.supported, a = document.createElement("div");
-    if (a.setAttribute("hidden", ""), i && a.setAttribute("id", t), n2) {
-      const e2 = window.localStorage.getItem(`cache-${t}`);
-      if (s = null !== e2, s) {
+  if (!s || !r()) {
+    const r2 = Storage.supported, o = document.createElement("div");
+    if (o.setAttribute("hidden", ""), s && o.setAttribute("id", t), r2) {
+      const e2 = window.localStorage.getItem(`${i}-${t}`);
+      if (n = null !== e2, n) {
         const t2 = JSON.parse(e2);
-        r(a, t2.content);
+        a(o, t2.content);
       }
     }
     fetch(e).then((e2) => {
       if (!is.empty(e2)) {
-        if (n2)
+        if (r2)
           try {
-            window.localStorage.setItem(`cache-${t}`, JSON.stringify({ content: e2 }));
+            window.localStorage.setItem(`${i}-${t}`, JSON.stringify({ content: e2 }));
           } catch (e3) {
           }
-        r(a, e2);
+        a(o, e2);
       }
     }).catch(() => {
     });
   }
 }
-const getHours = (e) => Math.trunc(e / 60 / 60 % 60, 10), getSeconds = (e) => Math.trunc(e % 60, 10);
+const getHours = (e) => Math.trunc(e / 60 / 60 % 60, 10), getMinutes = (e) => Math.trunc(e / 60 % 60, 10), getSeconds = (e) => Math.trunc(e % 60, 10);
 function formatTime(e = 0, t = false, i = false) {
   if (!is.number(e))
     return formatTime(void 0, t, i);
   const s = (e2) => `0${e2}`.slice(-2);
   let n = getHours(e);
-  const r = (a = e, Math.trunc(a / 60 % 60, 10));
-  var a;
-  const o = getSeconds(e);
-  return n = t || n > 0 ? `${n}:` : "", `${i && e > 0 ? "-" : ""}${n}${s(r)}:${s(o)}`;
+  const r = getMinutes(e), a = getSeconds(e);
+  return n = t || n > 0 ? `${n}:` : "", `${i && e > 0 ? "-" : ""}${n}${s(r)}:${s(a)}`;
 }
 const controls = { getIconUrl() {
   const e = new URL(this.config.iconUrl, window.location), t = window.location.host ? window.location.host : window.top.location.host, i = e.host !== t || browser.isIE && !window.svg4everybody;
@@ -621,20 +636,20 @@ const controls = { getIconUrl() {
   }
   return this.elements.display[e] = i, i;
 }, createTime(e, t) {
-  const i = getAttributesFromSelector(this.config.selectors.display[e], t), s = createElement("div", extend(i, { class: `${i.class ? i.class : ""} ${this.config.classNames.display.time} `.trim(), "aria-label": i18n.get(e, this.config) }), "00:00");
+  const i = getAttributesFromSelector(this.config.selectors.display[e], t), s = createElement("div", extend(i, { class: `${i.class ? i.class : ""} ${this.config.classNames.display.time} `.trim(), "aria-label": i18n.get(e, this.config), role: "timer" }), "00:00");
   return this.elements.display[e] = s, s;
 }, bindMenuItemShortcuts(e, t) {
   on.call(this, e, "keydown keyup", (i) => {
-    if (!["Space", "ArrowUp", "ArrowDown", "ArrowRight"].includes(i.key))
+    if (![" ", "ArrowUp", "ArrowDown", "ArrowRight"].includes(i.key))
       return;
     if (i.preventDefault(), i.stopPropagation(), "keydown" === i.type)
       return;
     const s = matches$2(e, '[role="menuitemradio"]');
-    if (!s && ["Space", "ArrowRight"].includes(i.key))
+    if (!s && [" ", "ArrowRight"].includes(i.key))
       controls.showMenuPanel.call(this, t, true);
     else {
       let t2;
-      "Space" !== i.key && ("ArrowDown" === i.key || s && "ArrowRight" === i.key ? (t2 = e.nextElementSibling, is.element(t2) || (t2 = e.parentNode.firstElementChild)) : (t2 = e.previousElementSibling, is.element(t2) || (t2 = e.parentNode.lastElementChild)), setFocus.call(this, t2, true));
+      " " !== i.key && ("ArrowDown" === i.key || s && "ArrowRight" === i.key ? (t2 = e.nextElementSibling, is.element(t2) || (t2 = e.parentNode.firstElementChild)) : (t2 = e.previousElementSibling, is.element(t2) || (t2 = e.parentNode.lastElementChild)), setFocus.call(this, t2, true));
     }
   }, false), on.call(this, e, "keyup", (e2) => {
     "Return" === e2.key && controls.focusFirstMenuItem.call(this, null, true);
@@ -644,7 +659,7 @@ const controls = { getIconUrl() {
   l.innerHTML = s, is.element(n) && l.appendChild(n), o.appendChild(l), Object.defineProperty(o, "checked", { enumerable: true, get: () => "true" === o.getAttribute("aria-checked"), set(e2) {
     e2 && Array.from(o.parentNode.children).filter((e3) => matches$2(e3, '[role="menuitemradio"]')).forEach((e3) => e3.setAttribute("aria-checked", "false")), o.setAttribute("aria-checked", e2 ? "true" : "false");
   } }), this.listeners.bind(o, "click keyup", (t2) => {
-    if (!is.keyboardEvent(t2) || "Space" === t2.key) {
+    if (!is.keyboardEvent(t2) || " " === t2.key) {
       switch (t2.preventDefault(), t2.stopPropagation(), o.checked = true, i) {
         case "language":
           this.currentTrack = Number(e);
@@ -703,7 +718,7 @@ const controls = { getIconUrl() {
       t.setAttribute("aria-valuenow", e2), t.setAttribute("aria-valuetext", `${e2.toFixed(1)}%`);
     } else
       t.setAttribute("aria-valuenow", t.value);
-    browser.isWebkit && t.style.setProperty("--value", t.value / t.max * 100 + "%");
+    (browser.isWebKit || browser.isIPadOS) && t.style.setProperty("--value", t.value / t.max * 100 + "%");
   }
 }, updateSeekTooltip(e) {
   var t, i;
@@ -869,7 +884,7 @@ const controls = { getIconUrl() {
     }
     if ("current-time" === a2 && c.appendChild(r.call(this, "currentTime", u)), "duration" === a2 && c.appendChild(r.call(this, "duration", u)), "mute" === a2 || "volume" === a2) {
       let { volume: t2 } = this.elements;
-      if (is.element(t2) && c.contains(t2) || (t2 = createElement("div", extend({}, u, { class: `${u.class} plyr__volume`.trim() })), this.elements.volume = t2, c.appendChild(t2)), "mute" === a2 && t2.appendChild(i.call(this, "mute")), "volume" === a2 && !browser.isIos) {
+      if (is.element(t2) && c.contains(t2) || (t2 = createElement("div", extend({}, u, { class: `${u.class} plyr__volume`.trim() })), this.elements.volume = t2, c.appendChild(t2)), "mute" === a2 && t2.appendChild(i.call(this, "mute")), "volume" === a2 && !browser.isIos && !browser.isIPadOS) {
         const i2 = { max: 1, step: 0.05, value: this.config.volume };
         t2.appendChild(n.call(this, "volume", extend(i2, { id: `plyr-volume-${e.id}` })));
       }
@@ -1077,7 +1092,7 @@ const captions = { setup() {
     const e2 = createElement("span", getAttributesFromSelector(this.config.selectors.caption));
     e2.innerHTML = i, this.elements.captions.appendChild(e2), triggerEvent.call(this, this.media, "cuechange");
   }
-} }, defaults = { enabled: true, title: "", debug: false, autoplay: false, autopause: true, playsinline: true, seekTime: 10, volume: 1, muted: false, duration: null, displayDuration: true, invertTime: true, toggleInvert: true, ratio: null, clickToPlay: true, hideControls: true, resetOnEnd: false, disableContextMenu: true, loadSprite: true, iconPrefix: "plyr", iconUrl: "https://cdn.plyr.io/3.7.3/plyr.svg", blankVideo: "https://cdn.plyr.io/static/blank.mp4", quality: { default: 576, options: [4320, 2880, 2160, 1440, 1080, 720, 576, 480, 360, 240], forced: false, onChange: null }, loop: { active: false }, speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 4] }, keyboard: { focused: true, global: false }, tooltips: { controls: false, seek: true }, captions: { active: false, language: "auto", update: false }, fullscreen: { enabled: true, fallback: true, iosNative: false }, storage: { enabled: true, key: "plyr" }, controls: ["play-large", "play", "progress", "current-time", "mute", "volume", "captions", "settings", "pip", "airplay", "fullscreen"], settings: ["captions", "quality", "speed"], i18n: { restart: "Restart", rewind: "Rewind {seektime}s", play: "Play", pause: "Pause", fastForward: "Forward {seektime}s", seek: "Seek", seekLabel: "{currentTime} of {duration}", played: "Played", buffered: "Buffered", currentTime: "Current time", duration: "Duration", volume: "Volume", mute: "Mute", unmute: "Unmute", enableCaptions: "Enable captions", disableCaptions: "Disable captions", download: "Download", enterFullscreen: "Enter fullscreen", exitFullscreen: "Exit fullscreen", frameTitle: "Player for {title}", captions: "Captions", settings: "Settings", pip: "PIP", menuBack: "Go back to previous menu", speed: "Speed", normal: "Normal", quality: "Quality", loop: "Loop", start: "Start", end: "End", all: "All", reset: "Reset", disabled: "Disabled", enabled: "Enabled", advertisement: "Ad", qualityBadge: { 2160: "4K", 1440: "HD", 1080: "HD", 720: "HD", 576: "SD", 480: "SD" } }, urls: { download: null, vimeo: { sdk: "https://player.vimeo.com/api/player.js", iframe: "https://player.vimeo.com/video/{0}?{1}", api: "https://vimeo.com/api/oembed.json?url={0}" }, youtube: { sdk: "https://www.youtube.com/iframe_api", api: "https://noembed.com/embed?url=https://www.youtube.com/watch?v={0}" }, googleIMA: { sdk: "https://imasdk.googleapis.com/js/sdkloader/ima3.js" } }, listeners: { seek: null, play: null, pause: null, restart: null, rewind: null, fastForward: null, mute: null, volume: null, captions: null, download: null, fullscreen: null, pip: null, airplay: null, speed: null, quality: null, loop: null, language: null }, events: ["ended", "progress", "stalled", "playing", "waiting", "canplay", "canplaythrough", "loadstart", "loadeddata", "loadedmetadata", "timeupdate", "volumechange", "play", "pause", "error", "seeking", "seeked", "emptied", "ratechange", "cuechange", "download", "enterfullscreen", "exitfullscreen", "captionsenabled", "captionsdisabled", "languagechange", "controlshidden", "controlsshown", "ready", "statechange", "qualitychange", "adsloaded", "adscontentpause", "adscontentresume", "adstarted", "adsmidpoint", "adscomplete", "adsallcomplete", "adsimpression", "adsclick"], selectors: { editable: "input, textarea, select, [contenteditable]", container: ".plyr", controls: { container: null, wrapper: ".plyr__controls" }, labels: "[data-plyr]", buttons: { play: '[data-plyr="play"]', pause: '[data-plyr="pause"]', restart: '[data-plyr="restart"]', rewind: '[data-plyr="rewind"]', fastForward: '[data-plyr="fast-forward"]', mute: '[data-plyr="mute"]', captions: '[data-plyr="captions"]', download: '[data-plyr="download"]', fullscreen: '[data-plyr="fullscreen"]', pip: '[data-plyr="pip"]', airplay: '[data-plyr="airplay"]', settings: '[data-plyr="settings"]', loop: '[data-plyr="loop"]' }, inputs: { seek: '[data-plyr="seek"]', volume: '[data-plyr="volume"]', speed: '[data-plyr="speed"]', language: '[data-plyr="language"]', quality: '[data-plyr="quality"]' }, display: { currentTime: ".plyr__time--current", duration: ".plyr__time--duration", buffer: ".plyr__progress__buffer", loop: ".plyr__progress__loop", volume: ".plyr__volume--display" }, progress: ".plyr__progress", captions: ".plyr__captions", caption: ".plyr__caption" }, classNames: { type: "plyr--{0}", provider: "plyr--{0}", video: "plyr__video-wrapper", embed: "plyr__video-embed", videoFixedRatio: "plyr__video-wrapper--fixed-ratio", embedContainer: "plyr__video-embed__container", poster: "plyr__poster", posterEnabled: "plyr__poster-enabled", ads: "plyr__ads", control: "plyr__control", controlPressed: "plyr__control--pressed", playing: "plyr--playing", paused: "plyr--paused", stopped: "plyr--stopped", loading: "plyr--loading", hover: "plyr--hover", tooltip: "plyr__tooltip", cues: "plyr__cues", marker: "plyr__progress__marker", hidden: "plyr__sr-only", hideControls: "plyr--hide-controls", isIos: "plyr--is-ios", isTouch: "plyr--is-touch", uiSupported: "plyr--full-ui", noTransition: "plyr--no-transition", display: { time: "plyr__time" }, menu: { value: "plyr__menu__value", badge: "plyr__badge", open: "plyr--menu-open" }, captions: { enabled: "plyr--captions-enabled", active: "plyr--captions-active" }, fullscreen: { enabled: "plyr--fullscreen-enabled", fallback: "plyr--fullscreen-fallback" }, pip: { supported: "plyr--pip-supported", active: "plyr--pip-active" }, airplay: { supported: "plyr--airplay-supported", active: "plyr--airplay-active" }, tabFocus: "plyr__tab-focus", previewThumbnails: { thumbContainer: "plyr__preview-thumb", thumbContainerShown: "plyr__preview-thumb--is-shown", imageContainer: "plyr__preview-thumb__image-container", timeContainer: "plyr__preview-thumb__time-container", scrubbingContainer: "plyr__preview-scrubbing", scrubbingContainerShown: "plyr__preview-scrubbing--is-shown" } }, attributes: { embed: { provider: "data-plyr-provider", id: "data-plyr-embed-id", hash: "data-plyr-embed-hash" } }, ads: { enabled: false, publisherId: "", tagUrl: "" }, previewThumbnails: { enabled: false, src: "" }, vimeo: { byline: false, portrait: false, title: false, speed: true, transparent: false, customControls: true, referrerPolicy: null, premium: false }, youtube: { rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1, customControls: true, noCookie: false }, mediaMetadata: { title: "", artist: "", album: "", artwork: [] }, markers: { enabled: false, points: [] } }, pip = { active: "picture-in-picture", inactive: "inline" }, providers = { html5: "html5", youtube: "youtube", vimeo: "vimeo" }, types = { audio: "audio", video: "video" };
+} }, defaults = { enabled: true, title: "", debug: false, autoplay: false, autopause: true, playsinline: true, seekTime: 10, volume: 1, muted: false, duration: null, displayDuration: true, invertTime: true, toggleInvert: true, ratio: null, clickToPlay: true, hideControls: true, resetOnEnd: false, disableContextMenu: true, loadSprite: true, iconPrefix: "plyr", iconUrl: "https://cdn.plyr.io/3.7.8/plyr.svg", blankVideo: "https://cdn.plyr.io/static/blank.mp4", quality: { default: 576, options: [4320, 2880, 2160, 1440, 1080, 720, 576, 480, 360, 240], forced: false, onChange: null }, loop: { active: false }, speed: { selected: 1, options: [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 4] }, keyboard: { focused: true, global: false }, tooltips: { controls: false, seek: true }, captions: { active: false, language: "auto", update: false }, fullscreen: { enabled: true, fallback: true, iosNative: false }, storage: { enabled: true, key: "plyr" }, controls: ["play-large", "play", "progress", "current-time", "mute", "volume", "captions", "settings", "pip", "airplay", "fullscreen"], settings: ["captions", "quality", "speed"], i18n: { restart: "Restart", rewind: "Rewind {seektime}s", play: "Play", pause: "Pause", fastForward: "Forward {seektime}s", seek: "Seek", seekLabel: "{currentTime} of {duration}", played: "Played", buffered: "Buffered", currentTime: "Current time", duration: "Duration", volume: "Volume", mute: "Mute", unmute: "Unmute", enableCaptions: "Enable captions", disableCaptions: "Disable captions", download: "Download", enterFullscreen: "Enter fullscreen", exitFullscreen: "Exit fullscreen", frameTitle: "Player for {title}", captions: "Captions", settings: "Settings", pip: "PIP", menuBack: "Go back to previous menu", speed: "Speed", normal: "Normal", quality: "Quality", loop: "Loop", start: "Start", end: "End", all: "All", reset: "Reset", disabled: "Disabled", enabled: "Enabled", advertisement: "Ad", qualityBadge: { 2160: "4K", 1440: "HD", 1080: "HD", 720: "HD", 576: "SD", 480: "SD" } }, urls: { download: null, vimeo: { sdk: "https://player.vimeo.com/api/player.js", iframe: "https://player.vimeo.com/video/{0}?{1}", api: "https://vimeo.com/api/oembed.json?url={0}" }, youtube: { sdk: "https://www.youtube.com/iframe_api", api: "https://noembed.com/embed?url=https://www.youtube.com/watch?v={0}" }, googleIMA: { sdk: "https://imasdk.googleapis.com/js/sdkloader/ima3.js" } }, listeners: { seek: null, play: null, pause: null, restart: null, rewind: null, fastForward: null, mute: null, volume: null, captions: null, download: null, fullscreen: null, pip: null, airplay: null, speed: null, quality: null, loop: null, language: null }, events: ["ended", "progress", "stalled", "playing", "waiting", "canplay", "canplaythrough", "loadstart", "loadeddata", "loadedmetadata", "timeupdate", "volumechange", "play", "pause", "error", "seeking", "seeked", "emptied", "ratechange", "cuechange", "download", "enterfullscreen", "exitfullscreen", "captionsenabled", "captionsdisabled", "languagechange", "controlshidden", "controlsshown", "ready", "statechange", "qualitychange", "adsloaded", "adscontentpause", "adscontentresume", "adstarted", "adsmidpoint", "adscomplete", "adsallcomplete", "adsimpression", "adsclick"], selectors: { editable: "input, textarea, select, [contenteditable]", container: ".plyr", controls: { container: null, wrapper: ".plyr__controls" }, labels: "[data-plyr]", buttons: { play: '[data-plyr="play"]', pause: '[data-plyr="pause"]', restart: '[data-plyr="restart"]', rewind: '[data-plyr="rewind"]', fastForward: '[data-plyr="fast-forward"]', mute: '[data-plyr="mute"]', captions: '[data-plyr="captions"]', download: '[data-plyr="download"]', fullscreen: '[data-plyr="fullscreen"]', pip: '[data-plyr="pip"]', airplay: '[data-plyr="airplay"]', settings: '[data-plyr="settings"]', loop: '[data-plyr="loop"]' }, inputs: { seek: '[data-plyr="seek"]', volume: '[data-plyr="volume"]', speed: '[data-plyr="speed"]', language: '[data-plyr="language"]', quality: '[data-plyr="quality"]' }, display: { currentTime: ".plyr__time--current", duration: ".plyr__time--duration", buffer: ".plyr__progress__buffer", loop: ".plyr__progress__loop", volume: ".plyr__volume--display" }, progress: ".plyr__progress", captions: ".plyr__captions", caption: ".plyr__caption" }, classNames: { type: "plyr--{0}", provider: "plyr--{0}", video: "plyr__video-wrapper", embed: "plyr__video-embed", videoFixedRatio: "plyr__video-wrapper--fixed-ratio", embedContainer: "plyr__video-embed__container", poster: "plyr__poster", posterEnabled: "plyr__poster-enabled", ads: "plyr__ads", control: "plyr__control", controlPressed: "plyr__control--pressed", playing: "plyr--playing", paused: "plyr--paused", stopped: "plyr--stopped", loading: "plyr--loading", hover: "plyr--hover", tooltip: "plyr__tooltip", cues: "plyr__cues", marker: "plyr__progress__marker", hidden: "plyr__sr-only", hideControls: "plyr--hide-controls", isTouch: "plyr--is-touch", uiSupported: "plyr--full-ui", noTransition: "plyr--no-transition", display: { time: "plyr__time" }, menu: { value: "plyr__menu__value", badge: "plyr__badge", open: "plyr--menu-open" }, captions: { enabled: "plyr--captions-enabled", active: "plyr--captions-active" }, fullscreen: { enabled: "plyr--fullscreen-enabled", fallback: "plyr--fullscreen-fallback" }, pip: { supported: "plyr--pip-supported", active: "plyr--pip-active" }, airplay: { supported: "plyr--airplay-supported", active: "plyr--airplay-active" }, previewThumbnails: { thumbContainer: "plyr__preview-thumb", thumbContainerShown: "plyr__preview-thumb--is-shown", imageContainer: "plyr__preview-thumb__image-container", timeContainer: "plyr__preview-thumb__time-container", scrubbingContainer: "plyr__preview-scrubbing", scrubbingContainerShown: "plyr__preview-scrubbing--is-shown" } }, attributes: { embed: { provider: "data-plyr-provider", id: "data-plyr-embed-id", hash: "data-plyr-embed-hash" } }, ads: { enabled: false, publisherId: "", tagUrl: "" }, previewThumbnails: { enabled: false, src: "" }, vimeo: { byline: false, portrait: false, title: false, speed: true, transparent: false, customControls: true, referrerPolicy: null, premium: false }, youtube: { rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1, customControls: true, noCookie: false }, mediaMetadata: { title: "", artist: "", album: "", artwork: [] }, markers: { enabled: false, points: [] } }, pip = { active: "picture-in-picture", inactive: "inline" }, providers = { html5: "html5", youtube: "youtube", vimeo: "vimeo" }, types = { audio: "audio", video: "video" };
 function getProviderByUrl(e) {
   return /^(https?:\/\/)?(www\.)?(youtube\.com|youtube-nocookie\.com|youtu\.?be)\/.+$/.test(e) ? providers.youtube : /^https?:\/\/player.vimeo.com\/video\/\d{0,9}(?=\b|\/)/.test(e) ? providers.vimeo : null;
 }
@@ -1100,14 +1115,15 @@ class Console {
 class Fullscreen {
   constructor(e) {
     _defineProperty$1(this, "onChange", () => {
-      if (!this.enabled)
+      if (!this.supported)
         return;
       const e2 = this.player.elements.buttons.fullscreen;
       is.element(e2) && (e2.pressed = this.active);
       const t = this.target === this.player.media ? this.target : this.player.elements.container;
       triggerEvent.call(this.player, t, this.active ? "enterfullscreen" : "exitfullscreen", true);
     }), _defineProperty$1(this, "toggleFallback", (e2 = false) => {
-      if (e2 ? this.scrollPosition = { x: window.scrollX || 0, y: window.scrollY || 0 } : window.scrollTo(this.scrollPosition.x, this.scrollPosition.y), document.body.style.overflow = e2 ? "hidden" : "", toggleClass$1(this.target, this.player.config.classNames.fullscreen.fallback, e2), browser.isIos) {
+      var _a, _b;
+      if (e2 ? this.scrollPosition = { x: (_a = window.scrollX) != null ? _a : 0, y: (_b = window.scrollY) != null ? _b : 0 } : window.scrollTo(this.scrollPosition.x, this.scrollPosition.y), document.body.style.overflow = e2 ? "hidden" : "", toggleClass$1(this.target, this.player.config.classNames.fullscreen.fallback, e2), browser.isIos) {
         let t = document.head.querySelector('meta[name="viewport"]');
         const i = "viewport-fit=cover";
         t || (t = document.createElement("meta"), t.setAttribute("name", "viewport"));
@@ -1116,24 +1132,24 @@ class Fullscreen {
       }
       this.onChange();
     }), _defineProperty$1(this, "trapFocus", (e2) => {
-      if (browser.isIos || !this.active || "Tab" !== e2.key)
+      if (browser.isIos || browser.isIPadOS || !this.active || "Tab" !== e2.key)
         return;
       const t = document.activeElement, i = getElements.call(this.player, "a[href], button:not(:disabled), input:not(:disabled), [tabindex]"), [s] = i, n = i[i.length - 1];
       t !== n || e2.shiftKey ? t === s && e2.shiftKey && (n.focus(), e2.preventDefault()) : (s.focus(), e2.preventDefault());
     }), _defineProperty$1(this, "update", () => {
-      if (this.enabled) {
+      if (this.supported) {
         let e2;
-        e2 = this.forceFallback ? "Fallback (forced)" : Fullscreen.native ? "Native" : "Fallback", this.player.debug.log(`${e2} fullscreen enabled`);
+        e2 = this.forceFallback ? "Fallback (forced)" : Fullscreen.nativeSupported ? "Native" : "Fallback", this.player.debug.log(`${e2} fullscreen enabled`);
       } else
         this.player.debug.log("Fullscreen not supported and fallback disabled");
-      toggleClass$1(this.player.elements.container, this.player.config.classNames.fullscreen.enabled, this.enabled);
+      toggleClass$1(this.player.elements.container, this.player.config.classNames.fullscreen.enabled, this.supported);
     }), _defineProperty$1(this, "enter", () => {
-      this.enabled && (browser.isIos && this.player.config.fullscreen.iosNative ? this.player.isVimeo ? this.player.embed.requestFullscreen() : this.target.webkitEnterFullscreen() : !Fullscreen.native || this.forceFallback ? this.toggleFallback(true) : this.prefix ? is.empty(this.prefix) || this.target[`${this.prefix}Request${this.property}`]() : this.target.requestFullscreen({ navigationUI: "hide" }));
+      this.supported && (browser.isIos && this.player.config.fullscreen.iosNative ? this.player.isVimeo ? this.player.embed.requestFullscreen() : this.target.webkitEnterFullscreen() : !Fullscreen.nativeSupported || this.forceFallback ? this.toggleFallback(true) : this.prefix ? is.empty(this.prefix) || this.target[`${this.prefix}Request${this.property}`]() : this.target.requestFullscreen({ navigationUI: "hide" }));
     }), _defineProperty$1(this, "exit", () => {
-      if (this.enabled)
+      if (this.supported)
         if (browser.isIos && this.player.config.fullscreen.iosNative)
-          this.target.webkitExitFullscreen(), silencePromise(this.player.play());
-        else if (!Fullscreen.native || this.forceFallback)
+          this.player.isVimeo ? this.player.embed.exitFullscreen() : this.target.webkitEnterFullscreen(), silencePromise(this.player.play());
+        else if (!Fullscreen.nativeSupported || this.forceFallback)
           this.toggleFallback(false);
         else if (this.prefix) {
           if (!is.empty(this.prefix)) {
@@ -1150,11 +1166,11 @@ class Fullscreen {
       is.element(this.player.elements.controls) && this.player.elements.controls.contains(e2.target) || this.player.listeners.proxy(e2, this.toggle, "fullscreen");
     }), on.call(this, this.player.elements.container, "keydown", (e2) => this.trapFocus(e2)), this.update();
   }
-  static get native() {
+  static get nativeSupported() {
     return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled);
   }
-  get usingNative() {
-    return Fullscreen.native && !this.forceFallback;
+  get useNative() {
+    return Fullscreen.nativeSupported && !this.forceFallback;
   }
   static get prefix() {
     if (is.function(document.exitFullscreen))
@@ -1165,19 +1181,20 @@ class Fullscreen {
   static get property() {
     return "moz" === this.prefix ? "FullScreen" : "Fullscreen";
   }
-  get enabled() {
-    return (Fullscreen.native || this.player.config.fullscreen.fallback) && this.player.config.fullscreen.enabled && this.player.supported.ui && this.player.isVideo;
+  get supported() {
+    return [this.player.config.fullscreen.enabled, this.player.isVideo, Fullscreen.nativeSupported || this.player.config.fullscreen.fallback, !this.player.isYouTube || Fullscreen.nativeSupported || !browser.isIos || this.player.config.playsinline && !this.player.config.fullscreen.iosNative].every(Boolean);
   }
   get active() {
-    if (!this.enabled)
+    if (!this.supported)
       return false;
-    if (!Fullscreen.native || this.forceFallback)
+    if (!Fullscreen.nativeSupported || this.forceFallback)
       return hasClass$1(this.target, this.player.config.classNames.fullscreen.fallback);
     const e = this.prefix ? this.target.getRootNode()[`${this.prefix}${this.property}Element`] : this.target.getRootNode().fullscreenElement;
     return e && e.shadowRoot ? e === this.target.getRootNode().host : e === this.target;
   }
   get target() {
-    return browser.isIos && this.player.config.fullscreen.iosNative ? this.player.media : this.player.elements.fullscreen || this.player.elements.container;
+    var _a;
+    return browser.isIos && this.player.config.fullscreen.iosNative ? this.player.media : (_a = this.player.elements.fullscreen) != null ? _a : this.player.elements.container;
   }
 }
 function loadImage(e, t = 1) {
@@ -1195,7 +1212,7 @@ const ui = { addStyleHook() {
 }, build() {
   if (this.listeners.media(), !this.supported.ui)
     return this.debug.warn(`Basic support only for ${this.provider} ${this.type}`), void ui.toggleNativeControls.call(this, true);
-  is.element(this.elements.controls) || (controls.inject.call(this), this.listeners.controls()), ui.toggleNativeControls.call(this), this.isHTML5 && captions.setup.call(this), this.volume = null, this.muted = null, this.loop = null, this.quality = null, this.speed = null, controls.updateVolume.call(this), controls.timeUpdate.call(this), controls.durationUpdate.call(this), ui.checkPlaying.call(this), toggleClass$1(this.elements.container, this.config.classNames.pip.supported, support.pip && this.isHTML5 && this.isVideo), toggleClass$1(this.elements.container, this.config.classNames.airplay.supported, support.airplay && this.isHTML5), toggleClass$1(this.elements.container, this.config.classNames.isIos, browser.isIos), toggleClass$1(this.elements.container, this.config.classNames.isTouch, this.touch), this.ready = true, setTimeout(() => {
+  is.element(this.elements.controls) || (controls.inject.call(this), this.listeners.controls()), ui.toggleNativeControls.call(this), this.isHTML5 && captions.setup.call(this), this.volume = null, this.muted = null, this.loop = null, this.quality = null, this.speed = null, controls.updateVolume.call(this), controls.timeUpdate.call(this), controls.durationUpdate.call(this), ui.checkPlaying.call(this), toggleClass$1(this.elements.container, this.config.classNames.pip.supported, support.pip && this.isHTML5 && this.isVideo), toggleClass$1(this.elements.container, this.config.classNames.airplay.supported, support.airplay && this.isHTML5), toggleClass$1(this.elements.container, this.config.classNames.isTouch, this.touch), this.ready = true, setTimeout(() => {
     triggerEvent.call(this, this.media, "ready");
   }, 0), ui.setTitle.call(this), this.poster && ui.setPoster.call(this, this.poster, false).catch(() => {
   }), this.config.duration && controls.durationUpdate.call(this), this.config.mediaMetadata && controls.setMediaMetadata.call(this);
@@ -1243,22 +1260,9 @@ class Listeners {
     _defineProperty$1(this, "firstTouch", () => {
       const { player: e2 } = this, { elements: t } = e2;
       e2.touch = true, toggleClass$1(t.container, e2.config.classNames.isTouch, true);
-    }), _defineProperty$1(this, "setTabFocus", (e2) => {
-      const { player: t } = this, { elements: i } = t, { key: s, type: n, timeStamp: r } = e2;
-      if (clearTimeout(this.focusTimer), "keydown" === n && "Tab" !== s)
-        return;
-      "keydown" === n && (this.lastKeyDown = r);
-      const a = r - this.lastKeyDown <= 20;
-      ("focus" !== n || a) && ((() => {
-        const e3 = t.config.classNames.tabFocus;
-        toggleClass$1(getElements.call(t, `.${e3}`), e3, false);
-      })(), "focusout" !== n && (this.focusTimer = setTimeout(() => {
-        const e3 = document.activeElement;
-        i.container.contains(e3) && toggleClass$1(document.activeElement, t.config.classNames.tabFocus, true);
-      }, 10)));
     }), _defineProperty$1(this, "global", (e2 = true) => {
       const { player: t } = this;
-      t.config.keyboard.global && toggleListener.call(t, window, "keydown keyup", this.handleKey, e2, false), toggleListener.call(t, document.body, "click", this.toggleMenu, e2), once.call(t, document.body, "touchstart", this.firstTouch), toggleListener.call(t, document.body, "keydown focus blur focusout", this.setTabFocus, e2, false, true);
+      t.config.keyboard.global && toggleListener.call(t, window, "keydown keyup", this.handleKey, e2, false), toggleListener.call(t, document.body, "click", this.toggleMenu, e2), once.call(t, document.body, "touchstart", this.firstTouch);
     }), _defineProperty$1(this, "container", () => {
       const { player: e2 } = this, { config: t, elements: i, timers: s } = e2;
       !t.keyboard.global && t.keyboard.focused && on.call(e2, i.container, "keydown keyup", this.handleKey, false), on.call(e2, i.container, "mousemove mouseleave touchstart touchmove enterfullscreen exitfullscreen", (t2) => {
@@ -1347,7 +1351,7 @@ class Listeners {
       }, "pip"), this.bind(t.buttons.airplay, "click", e2.airplay, "airplay"), this.bind(t.buttons.settings, "click", (t2) => {
         t2.stopPropagation(), t2.preventDefault(), controls.toggleMenu.call(e2, t2);
       }, null, false), this.bind(t.buttons.settings, "keyup", (t2) => {
-        ["Space", "Enter"].includes(t2.key) && ("Enter" !== t2.key ? (t2.preventDefault(), t2.stopPropagation(), controls.toggleMenu.call(e2, t2)) : controls.focusFirstMenuItem.call(e2, null, true));
+        [" ", "Enter"].includes(t2.key) && ("Enter" !== t2.key ? (t2.preventDefault(), t2.stopPropagation(), controls.toggleMenu.call(e2, t2)) : controls.focusFirstMenuItem.call(e2, null, true));
       }, null, false), this.bind(t.settings.menu, "keydown", (t2) => {
         "Escape" === t2.key && controls.toggleMenu.call(e2, t2);
       }), this.bind(t.inputs.seek, "mousedown mousemove", (e3) => {
@@ -1380,7 +1384,7 @@ class Listeners {
       }), this.bind(t.progress, "mouseup touchend", (t2) => {
         const { previewThumbnails: i2 } = e2;
         i2 && i2.loaded && i2.endScrubbing(t2);
-      }), browser.isWebkit && Array.from(getElements.call(e2, 'input[type="range"]')).forEach((t2) => {
+      }), browser.isWebKit && Array.from(getElements.call(e2, 'input[type="range"]')).forEach((t2) => {
         this.bind(t2, "input", (t3) => controls.updateRangeFill.call(e2, t3.target));
       }), e2.config.toggleInvert && !is.element(t.display.duration) && this.bind(t.display.currentTime, "click", () => {
         0 !== e2.currentTime && (e2.config.invertTime = !e2.config.invertTime, controls.timeUpdate.call(e2));
@@ -1407,7 +1411,7 @@ class Listeners {
         const { volume: a } = e2.media;
         (1 === r && a < 1 || -1 === r && a > 0) && t2.preventDefault();
       }, "volume", false);
-    }), this.player = e, this.lastKey = null, this.focusTimer = null, this.lastKeyDown = null, this.handleKey = this.handleKey.bind(this), this.toggleMenu = this.toggleMenu.bind(this), this.setTabFocus = this.setTabFocus.bind(this), this.firstTouch = this.firstTouch.bind(this);
+    }), this.player = e, this.lastKey = null, this.focusTimer = null, this.lastKeyDown = null, this.handleKey = this.handleKey.bind(this), this.toggleMenu = this.toggleMenu.bind(this), this.firstTouch = this.firstTouch.bind(this);
   }
   handleKey(e) {
     const { player: t } = this, { elements: i } = t, { key: s, type: n, altKey: r, ctrlKey: a, metaKey: o, shiftKey: l } = e, c = "keydown" === n, u = c && s === this.lastKey;
@@ -1421,10 +1425,10 @@ class Listeners {
         const { editable: s2 } = t.config.selectors, { seek: r2 } = i.inputs;
         if (n2 !== r2 && matches$2(n2, s2))
           return;
-        if ("Space" === e.key && matches$2(n2, 'button, [role^="menuitem"]'))
+        if (" " === e.key && matches$2(n2, 'button, [role^="menuitem"]'))
           return;
       }
-      switch (["Space", "ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "c", "f", "k", "l", "m"].includes(s) && (e.preventDefault(), e.stopPropagation()), s) {
+      switch ([" ", "ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "c", "f", "k", "l", "m"].includes(s) && (e.preventDefault(), e.stopPropagation()), s) {
         case "0":
         case "1":
         case "2":
@@ -1437,7 +1441,7 @@ class Listeners {
         case "9":
           u || (d = parseInt(s, 10), t.currentTime = t.duration / 10 * d);
           break;
-        case "Space":
+        case " ":
         case "k":
           u || silencePromise(t.togglePlay());
           break;
@@ -1591,7 +1595,7 @@ const vimeo = { setup() {
   is.empty(r) ? (r = e.media.getAttribute(e.config.attributes.embed.id), a = e.media.getAttribute(e.config.attributes.embed.hash)) : a = parseHash(r);
   const o = a ? { h: a } : {};
   i && Object.assign(n, { controls: false, sidedock: false });
-  const l = buildUrlParams({ loop: e.config.loop.active, autoplay: e.autoplay, muted: e.muted, gesture: "media", playsinline: !this.config.fullscreen.iosNative, ...o, ...n }), c = parseId$1(r), u = createElement("iframe"), d = format$1(e.config.urls.vimeo.iframe, c, l);
+  const l = buildUrlParams({ loop: e.config.loop.active, autoplay: e.autoplay, muted: e.muted, gesture: "media", playsinline: e.config.playsinline, ...o, ...n }), c = parseId$1(r), u = createElement("iframe"), d = format$1(e.config.urls.vimeo.iframe, c, l);
   if (u.setAttribute("src", d), u.setAttribute("allowfullscreen", ""), u.setAttribute("allow", ["autoplay", "fullscreen", "picture-in-picture", "encrypted-media", "accelerometer", "gyroscope"].join("; ")), is.empty(s) || u.setAttribute("referrerPolicy", s), i || !t.customControls)
     u.setAttribute("data-poster", e.poster), e.media = replaceElement(u, e.media);
   else {
@@ -1627,7 +1631,7 @@ const vimeo = { setup() {
   let { muted: g } = e.config;
   Object.defineProperty(e.media, "muted", { get: () => g, set(t2) {
     const i2 = !!is.boolean(t2) && t2;
-    e.embed.setVolume(i2 ? 0 : e.config.volume).then(() => {
+    e.embed.setMuted(!!i2 || e.config.muted).then(() => {
       g = i2, triggerEvent.call(e, e.media, "volumechange");
     });
   } });
@@ -1731,9 +1735,9 @@ const youtube = { setup() {
     }).catch(() => {
     });
   }
-  e.embed = new window.YT.Player(e.media, { videoId: n, host: getHost(t), playerVars: extend({}, { autoplay: e.config.autoplay ? 1 : 0, hl: e.config.hl, controls: e.supported.ui && t.customControls ? 0 : 1, disablekb: 1, playsinline: e.config.fullscreen.iosNative ? 0 : 1, cc_load_policy: e.captions.active ? 1 : 0, cc_lang_pref: e.config.captions.language, widget_referrer: window ? window.location.href : null }, t), events: { onError(t2) {
+  e.embed = new window.YT.Player(e.media, { videoId: n, host: getHost(t), playerVars: extend({}, { autoplay: e.config.autoplay ? 1 : 0, hl: e.config.hl, controls: e.supported.ui && t.customControls ? 0 : 1, disablekb: 1, playsinline: e.config.playsinline && !e.config.fullscreen.iosNative ? 1 : 0, cc_load_policy: e.captions.active ? 1 : 0, cc_lang_pref: e.config.captions.language, widget_referrer: window ? window.location.href : null }, t), events: { onError(t2) {
     if (!e.media.error) {
-      const i2 = t2.data, s2 = { 2: "The request contains an invalid parameter value. For example, this error occurs if you specify a video ID that does not have 11 characters, or if the video ID contains invalid characters, such as exclamation points or asterisks.", 5: "The requested content cannot be played in an HTML5 player or another error related to the HTML5 player has occurred.", 100: "The video requested was not found. This error occurs when a video has been removed (for any reason) or has been marked as private.", 101: "The owner of the requested video does not allow it to be played in embedded players.", 150: "The owner of the requested video does not allow it to be played in embedded players." }[i2] || "An unknown error occured";
+      const i2 = t2.data, s2 = { 2: "The request contains an invalid parameter value. For example, this error occurs if you specify a video ID that does not have 11 characters, or if the video ID contains invalid characters, such as exclamation points or asterisks.", 5: "The requested content cannot be played in an HTML5 player or another error related to the HTML5 player has occurred.", 100: "The video requested was not found. This error occurs when a video has been removed (for any reason) or has been marked as private.", 101: "The owner of the requested video does not allow it to be played in embedded players.", 150: "The owner of the requested video does not allow it to be played in embedded players." }[i2] || "An unknown error occurred";
       e.media.error = { code: i2, message: s2 }, triggerEvent.call(e, e.media, "error");
     }
   }, onPlaybackRateChange(t2) {
@@ -1959,7 +1963,7 @@ class PreviewThumbnails {
   constructor(e) {
     _defineProperty$1(this, "load", () => {
       this.player.elements.display.seekTooltip && (this.player.elements.display.seekTooltip.hidden = this.enabled), this.enabled && this.getThumbnails().then(() => {
-        this.enabled && (this.render(), this.determineContainerAutoSizing(), this.loaded = true);
+        this.enabled && (this.render(), this.determineContainerAutoSizing(), this.listeners(), this.loaded = true);
       });
     }), _defineProperty$1(this, "getThumbnails", () => new Promise((e2) => {
       const { src: t } = this.player.config.previewThumbnails;
@@ -2230,7 +2234,7 @@ class Plyr {
       default:
         return void this.debug.error("Setup failed: unsupported type");
     }
-    this.supported = support.check(this.type, this.provider, this.config.playsinline), this.supported.api ? (this.eventListeners = [], this.listeners = new Listeners(this), this.storage = new Storage(this), this.media.plyr = this, is.element(this.elements.container) || (this.elements.container = createElement("div", { tabindex: 0 }), wrap(this.media, this.elements.container)), ui.migrateStyles.call(this), ui.addStyleHook.call(this), media.setup.call(this), this.config.debug && on.call(this, this.elements.container, this.config.events.join(" "), (e2) => {
+    this.supported = support.check(this.type, this.provider), this.supported.api ? (this.eventListeners = [], this.listeners = new Listeners(this), this.storage = new Storage(this), this.media.plyr = this, is.element(this.elements.container) || (this.elements.container = createElement("div"), wrap(this.media, this.elements.container)), ui.migrateStyles.call(this), ui.addStyleHook.call(this), media.setup.call(this), this.config.debug && on.call(this, this.elements.container, this.config.events.join(" "), (e2) => {
       this.debug.log(`event: ${e2.type}`);
     }), this.fullscreen = new Fullscreen(this), (this.isHTML5 || this.isEmbed && !this.supported.ui) && ui.build.call(this), this.listeners.container(), this.listeners.global(), this.config.ads.enabled && (this.ads = new Ads(this)), this.isHTML5 && this.config.autoplay && this.once("canplay", () => silencePromise(this.play())), this.lastSeekTime = 0, this.config.previewThumbnails.enabled && (this.previewThumbnails = new PreviewThumbnails(this))) : this.debug.error("Setup failed: no support");
   }
@@ -2402,8 +2406,8 @@ class Plyr {
   setPreviewThumbnails(e) {
     this.previewThumbnails && this.previewThumbnails.loaded && (this.previewThumbnails.destroy(), this.previewThumbnails = null), Object.assign(this.config.previewThumbnails, e), this.config.previewThumbnails.enabled && (this.previewThumbnails = new PreviewThumbnails(this));
   }
-  static supported(e, t, i) {
-    return support.check(e, t, i);
+  static supported(e, t) {
+    return support.check(e, t);
   }
   static loadSprite(e, t) {
     return loadSprite(e, t);
@@ -2432,6 +2436,12 @@ function _createClass(Constructor, protoProps, staticProps) {
   Object.defineProperty(Constructor, "prototype", { writable: false });
   return Constructor;
 }
+/*!
+ * Splide.js
+ * Version  : 4.1.4
+ * License  : MIT
+ * Copyright: 2022 Naotoshi Fujita
+ */
 var MEDIA_PREFERS_REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
 var CREATED = 1;
 var MOUNTED = 2;
@@ -4978,6 +4988,9 @@ var _Splide = /* @__PURE__ */ function() {
 var Splide = _Splide;
 Splide.defaults = {};
 Splide.STATES = STATES;
+function getDefaultExportFromCjs(x) {
+  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
+}
 var util = {};
 util.getQueryParams = function getQueryParams(qs) {
   if (typeof qs !== "string") {
@@ -5076,7 +5089,7 @@ function UrlParser$1() {
   }
   this.plugins = {};
 }
-var urlParser = UrlParser$1;
+var urlParser$1 = UrlParser$1;
 UrlParser$1.prototype.parseProvider = function(url) {
   var match = url.match(
     /(?:(?:https?:)?\/\/)?(?:[^.]+\.)?(\w+)\./i
@@ -5134,9 +5147,10 @@ function removeEmptyParameters(result) {
   }
   return result;
 }
-const UrlParser = urlParser;
+const UrlParser = urlParser$1;
 const parser = new UrlParser();
 var base = parser;
+const urlParser = /* @__PURE__ */ getDefaultExportFromCjs(base);
 const { combineParams: combineParams$1, getTime: getTime$1 } = util;
 function Vimeo() {
   this.provider = "vimeo";
@@ -5865,6 +5879,10 @@ var lazysizes = { exports: {} };
     }
   })(
     typeof window != "undefined" ? window : {},
+    /**
+     * import("./types/global")
+     * @typedef { import("./types/lazysizes-config").LazySizesConfigPartial } LazySizesConfigPartial
+     */
     function l(window2, document2, Date2) {
       var lazysizes2, lazySizesCfg;
       (function() {
@@ -5875,12 +5893,14 @@ var lazysizes = { exports: {} };
           loadingClass: "lazyloading",
           preloadClass: "lazypreload",
           errorClass: "lazyerror",
+          //strictClass: 'lazystrict',
           autosizesClass: "lazyautosizes",
           fastLoadedClass: "ls-is-cached",
           iframeLoadMode: 0,
           srcAttr: "data-src",
           srcsetAttr: "data-srcset",
           sizesAttr: "data-sizes",
+          //preloadAfterLoad: false,
           minSize: 40,
           customMedia: {},
           init: true,
@@ -5902,7 +5922,13 @@ var lazysizes = { exports: {} };
         return {
           init: function() {
           },
+          /**
+           * @type { LazySizesConfigPartial }
+           */
           cfg: lazySizesCfg,
+          /**
+           * @type { true }
+           */
           noSupport: true
         };
       }
@@ -6425,6 +6451,9 @@ var lazysizes = { exports: {} };
         }
       });
       lazysizes2 = {
+        /**
+         * @type { LazySizesConfigPartial }
+         */
         cfg: lazySizesCfg,
         autoSizer,
         loader,
@@ -6441,6 +6470,7 @@ var lazysizes = { exports: {} };
     }
   );
 })(lazysizes);
+var lazysizesExports = lazysizes.exports;
 var ls_blurUp = { exports: {} };
 (function(module) {
   (function(window2, factory) {
@@ -6453,7 +6483,7 @@ var ls_blurUp = { exports: {} };
     };
     factory = factory.bind(null, window2, window2.document);
     if (module.exports) {
-      factory(lazysizes.exports);
+      factory(lazysizesExports);
     } else if (window2.lazySizes) {
       globalInstall();
     } else {
@@ -6692,6 +6722,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
           },
           classes: {
+            // Add classes for arrows.
             arrows: "splide__arrows c-carousel__arrows",
             arrow: "splide__arrow c-carousel__arrow",
             prev: "splide__arrow--prev c-carousel__prev",
@@ -6743,7 +6774,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const popUpPlayerMarkup = `<div class="c-video-modal" id="pop_up_modal">
         <div class="c-video-modal__close-button" id="pop_up_modal_close">X</div>
         <div class="plyr__video-embed">
-          <div id="pop_up__player_element" data-plyr-provider="${base.parse(videoId).provider}" data-plyr-embed-id="${videoId}"></div>
+          <div id="pop_up__player_element" data-plyr-provider="${urlParser.parse(videoId).provider}" data-plyr-embed-id="${videoId}"></div>
         </div>
       </div>`;
       const playerWrapper = document.getElementById("pop_up_player");

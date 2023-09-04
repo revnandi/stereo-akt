@@ -6,9 +6,10 @@
 
           $link = get_sub_field('link');
           $icon = get_sub_field('icon');
+          $name = get_sub_field('name');
           ?>
-          <a class="c-social-links__link" href="<?php echo $link ?>" target="_blank">
-              <img class="c-social-links__icon" src="<?php echo $icon['url'] ?>">
+          <a class="c-social-links__link" href="<?php echo $link ?>" target="_blank" aria-label="<?php echo $name ?>">
+              <img class="c-social-links__icon" src="<?php echo $icon['url'] ?>" alt="">
           </a>
           <?php
 
