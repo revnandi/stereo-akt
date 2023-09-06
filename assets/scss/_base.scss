@@ -33,8 +33,10 @@ h2 {
   letter-spacing: 0;
 }
 
+
 main {
   @include breakpoint(small) {
+    // this is to fix the mobile header covering the content, it works on mobile devices but looks bad in browser inspector device view...
     margin-top: 3.75rem;
   }
 }

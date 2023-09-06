@@ -14,7 +14,7 @@ Template Name: Boross
 
     <div class="c-content">
 
-      <div class="c-content__columns">
+      <div class="c-content__columns c-content__columns--mobile-order-switched">
 
         <div class="c-content__column">
 
@@ -238,7 +238,7 @@ Template Name: Boross
           
           <div class="c-content__inner c-content__inner--inverse c-content__inner--padded c-content__inner--fixed-typography">
             <h1 class="c-content__title"><?php the_title() ?></h1>
-            
+
             <?php the_content(); ?>
           </div>
 

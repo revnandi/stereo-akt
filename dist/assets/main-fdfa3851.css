@@ -2485,6 +2485,14 @@ a.plyr__control::after, a.plyr__control::before {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+@media (max-width: 880px) {
+  .c-content__columns--mobile-order-switched > :first-child {
+    order: 2;
+  }
+  .c-content__columns--mobile-order-switched > :last-child {
+    order: 1;
+  }
+}
 @media (min-width: 881px) {
   .c-content__column {
     max-height: 100vh;

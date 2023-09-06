@@ -35,6 +35,16 @@
     @include breakpoint(medium_large) {
       grid-template-columns: repeat(2, 1fr);
     }
+    &--mobile-order-switched {
+      @include breakpoint(small) {
+        & > :first-child {
+          order: 2
+        }
+        & > :last-child {
+          order: 1
+        }
+      }
+    }
   }
   &__column {
     @include breakpoint(medium) {
