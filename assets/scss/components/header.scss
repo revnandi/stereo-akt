@@ -36,6 +36,9 @@
     &--is-active {
       display: flex;
     }
+    &--alt {
+      margin-left: 0;
+    }
   }
   &__menu-right {
     display: flex;
@@ -66,6 +69,7 @@
     font-size: 3.854166666666667vw;
     text-transform: uppercase;
     display: none;
+    text-decoration: none;
     @include breakpoint(medium) {
       display: flex;
       font-size: 2.5vw;
@@ -77,6 +81,27 @@
     }
     @include breakpoint(wide) {
       font-size: 3vw;
+    }
+    &--alt {
+      display: flex;
+      justify-content: left;
+      padding: 0;
+      background-color: #000;
+      color: $color-green;
+      font-size: 10vw;
+      @include breakpoint(medium) {
+        padding: 0.5rem 0.5em;
+        min-width: 12ch;
+        font-size: 1.25rem;
+        background-color: $color-green;
+        color: #000; 
+      }
+      @include breakpoint(large) {
+        font-size: 2rem;
+      }
+      @include breakpoint(wide) {
+        font-size: 2.25rem;
+      }
     }
   }
   &__button-container {

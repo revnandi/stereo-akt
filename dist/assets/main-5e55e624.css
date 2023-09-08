@@ -2093,6 +2093,9 @@ a.plyr__control::after, a.plyr__control::before {
 .c-header__menu-container--is-active {
   display: flex;
 }
+.c-header__menu-container--alt {
+  margin-left: 0;
+}
 .c-header__menu-right {
   display: flex;
 }
@@ -2125,6 +2128,7 @@ a.plyr__control::after, a.plyr__control::before {
   font-size: 3.8541666667vw;
   text-transform: uppercase;
   display: none;
+  text-decoration: none;
 }
 @media (min-width: 881px) {
   .c-header__decorator {
@@ -2140,6 +2144,33 @@ a.plyr__control::after, a.plyr__control::before {
 @media (min-width: 1400px) {
   .c-header__decorator {
     font-size: 3vw;
+  }
+}
+.c-header__decorator--alt {
+  display: flex;
+  justify-content: left;
+  padding: 0;
+  background-color: #000;
+  color: #92c7ae;
+  font-size: 10vw;
+}
+@media (min-width: 881px) {
+  .c-header__decorator--alt {
+    padding: 0.5rem 0.5em;
+    min-width: 12ch;
+    font-size: 1.25rem;
+    background-color: #92c7ae;
+    color: #000;
+  }
+}
+@media (min-width: 1300px) {
+  .c-header__decorator--alt {
+    font-size: 2rem;
+  }
+}
+@media (min-width: 1400px) {
+  .c-header__decorator--alt {
+    font-size: 2.25rem;
   }
 }
 .c-header__button-container {
@@ -2264,6 +2295,8 @@ a.plyr__control::after, a.plyr__control::before {
   line-height: 1.181em;
   text-transform: uppercase;
   text-decoration: none;
+  padding: 0.5rem 0;
+  display: inline-block;
 }
 @media (max-width: 880px) {
   .c-main-navigation__link {
@@ -2321,6 +2354,9 @@ a.plyr__control::after, a.plyr__control::before {
   .c-language-selector {
     font-size: 1.375rem;
   }
+}
+.c-language-selector--alt::after {
+  content: none !important;
 }
 .c-language-selector__list {
   position: relative;

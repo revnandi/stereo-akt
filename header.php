@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <title><?php the_title() ?> | Stereo Akt</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <title>
+        <?php the_title() ?> | Stereo Akt
+    </title>
     <?php wp_head() ?>
     <style>
         body:not(.loaded) header {
-            display:none;
+            display: none;
         }
+
         body:not(.loaded) main {
-            display:none;
+            display: none;
         }
+
         body:not(.loaded) footer {
-            display:none;
+            display: none;
         }
     </style>
 </head>
+
 <body onload="document.body.classList.add('loaded')" <?php body_class('flex flex-col h-screen') ?>>
-<?php wp_body_open(); ?>
+    <?php wp_body_open(); ?>
 
     <header class="c-header">
         <div class="c-header__inner">
@@ -33,26 +40,44 @@
                     </span>
                 </button>
             </div>
-            <div id="stereoakt_menu_container" class="c-header__menu-container">
-                <?php require get_template_directory() . '/partials/header/nav.php'; ?>
-                <div class="c-header__menu-right">
-                    <?php require get_template_directory() . '/partials/header/social.php'; ?>
+            <?php if (basename( get_page_template()) == 'boross.php'): ?>
+                <div id="stereoakt_menu_container" class="c-header__menu-container c-header__menu-container--alt">
+                    <a class="c-header__decorator c-header__decorator--alt" href="/">Stereo Akt</a>
                     <div class="c-header__logo-language-selector-container">
-                        <div class="c-header__decorator">Stereo</div>
-                        <div class="c-language-selector">
+                        <div class="c-language-selector c-language-selector--alt">
                             <ul class="c-language-selector__list">
-                            <?php pll_the_languages(
-                                array(
-                                    'display_names_as'=> 'slug',
-                                ));
-                            ?>
+                                <?php pll_the_languages(
+                                    array(
+                                        'display_names_as' => 'slug',
+                                    )
+                                );
+                                ?>
                             </ul>
                         </div>
                     </div>
                 </div>
-            </div>
+            <?php else: ?>
+                <div id="stereoakt_menu_container" class="c-header__menu-container">
+                    <?php require get_template_directory() . '/partials/header/nav.php'; ?>
+                    <div class="c-header__menu-right">
+                        <?php require get_template_directory() . '/partials/header/social.php'; ?>
+                        <div class="c-header__logo-language-selector-container">
+                            <div class="c-header__decorator">Stereo</div>
+                            <div class="c-language-selector">
+                                <ul class="c-language-selector__list">
+                                    <?php pll_the_languages(
+                                        array(
+                                            'display_names_as' => 'slug',
+                                        )
+                                    );
+                                    ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </header>
 
     <main>
-

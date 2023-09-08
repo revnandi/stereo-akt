@@ -152,4 +152,7 @@ add_action('init', function () {
 	pll_register_string('blog_prev', 'Previous Page');
 	pll_register_string('blog_next', 'Next Page');
 	pll_register_string('performance_single_page', 'Performances');
+	pll_register_string('boross_page', 'Film');
+	pll_register_string('boross_page', 'Theatre');
+	pll_register_string('boross_page', 'Other Projects And One-off Events');
 });

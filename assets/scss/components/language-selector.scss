@@ -20,6 +20,11 @@
   @include breakpoint(large) {
     font-size: 1.375rem;
   }
+  &--alt {
+    &::after {
+      content: none!important;
+    }
+  }
   &__list {
     position: relative;
     display: flex;
