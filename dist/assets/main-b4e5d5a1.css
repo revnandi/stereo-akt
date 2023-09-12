@@ -3331,6 +3331,7 @@ a.plyr__control::after, a.plyr__control::before {
   top: 1rem;
   right: 1rem;
   font-size: 2rem;
+  color: #BFA6CB;
   cursor: pointer;
 }
 .c-video-modal .plyr__video-embed__container {

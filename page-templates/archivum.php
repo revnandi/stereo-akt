@@ -52,9 +52,21 @@ Template Name: Archive
   $dates_list = [];
 
   $events_meta_query = [
+    'relation' => 'AND',
     [
-      'key'     => 'dates_0_date_time',
+      'key' => 'dates_0_date_time',
       'compare' => 'EXISTS',
+    ],
+    [
+      'relation' => 'OR',
+      [
+        'key' => 'boross_only',
+        'value' => 0,
+      ],
+      [
+        'key' => 'boross_only',
+        'compare' => 'NOT EXISTS',
+      ]
     ]
   ];
 

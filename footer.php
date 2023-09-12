@@ -1,8 +1,8 @@
 </main>
+<div id="pop_up_player"></div>
 <?php if (basename( get_page_template()) !== 'boross.php'): ?>
 
     <footer class="c-footer">
-        <div id="pop_up_player"></div>
         <nav class="c-footer__navigation">
 
             <?php
